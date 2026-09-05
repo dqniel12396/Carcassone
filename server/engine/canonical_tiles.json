@@ -1,0 +1,5879 @@
+{
+  "base_21_00": {
+    "id": "base_21_00",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_00.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.55,
+          "y": 0.12
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.76,
+          "y": 0.79
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_01": {
+    "id": "base_21_01",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_01.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad Central (Caballero)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.52,
+          "y": 0.58
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_E",
+          "N_W"
+        ],
+        "pos": {
+          "x": 0.46,
+          "y": 0.14
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_south",
+        "type": "field",
+        "name": "Campo Sur (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.44,
+          "y": 0.94
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_02": {
+    "id": "base_21_02",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "R",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_02.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.52,
+          "y": 0.36
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.79
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.29,
+          "y": 0.89
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior (Granjero)",
+        "edges": [
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.66,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_03": {
+    "id": "base_21_03",
+    "name": "Loseta Inicial",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "F",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": true,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_03.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.54,
+          "y": 0.09
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.47,
+          "y": 0.58
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.46,
+          "y": 0.39
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior Sur (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.78
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_04": {
+    "id": "base_21_04",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_04.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.37
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.48,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_05": {
+    "id": "base_21_05",
+    "name": "Ciudad Amurallada Completa",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "C",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_05.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.49
+        },
+        "color": "#3498db"
+      }
+    ]
+  },
+  "base_21_06": {
+    "id": "base_21_06",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "C",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_06.png",
+    "segments": [
+      {
+        "id": "city_north",
+        "type": "city",
+        "name": "Ciudad Norte (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.1
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_center",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "W_S",
+          "W_N",
+          "E_N",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "city_south",
+        "type": "city",
+        "name": "Ciudad Sur (Caballero)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.9
+        },
+        "color": "#3498db"
+      }
+    ]
+  },
+  "base_21_07": {
+    "id": "base_21_07",
+    "name": "Cruce de Caminos",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_07.png",
+    "segments": [
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.84,
+          "y": 0.51
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.57,
+          "y": 0.83
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.09,
+          "y": 0.48
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.47,
+          "y": 0.19
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.19,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_08": {
+    "id": "base_21_08",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "F",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_08.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.08
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.57
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.45,
+          "y": 0.4
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior Sur (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.3,
+          "y": 0.81
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_09": {
+    "id": "base_21_09",
+    "name": "Monasterio Medieval",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": true,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_09.png",
+    "segments": [
+      {
+        "id": "monastery",
+        "type": "monastery",
+        "name": "Monasterio (Monje)",
+        "edges": [],
+        "pos": {
+          "x": 0.5,
+          "y": 0.55
+        },
+        "color": "#e67e22"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.19,
+          "y": 0.17
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_10": {
+    "id": "base_21_10",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_10.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.36,
+          "y": 0.63
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.91,
+          "y": 0.6
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_11": {
+    "id": "base_21_11",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_11.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.51,
+          "y": 0.52
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.81,
+          "y": 0.49
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_12": {
+    "id": "base_21_12",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_12.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.36,
+          "y": 0.68
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.75,
+          "y": 0.25
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_13": {
+    "id": "base_21_13",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_13.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.55,
+          "y": 0.47
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.75,
+          "y": 0.24
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_14": {
+    "id": "base_21_14",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_14.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.67,
+          "y": 0.27
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.26,
+          "y": 0.71
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_15": {
+    "id": "base_21_15",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_15.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "W"
+        ],
+        "pos": {
+          "x": 0.32,
+          "y": 0.32
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.84,
+          "y": 0.57
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "E_N",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.3,
+          "y": 0.89
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.88,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_16": {
+    "id": "base_21_16",
+    "name": "Cruce de Caminos",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_16.png",
+    "segments": [
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.51
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.56,
+          "y": 0.88
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.1,
+          "y": 0.48
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.18
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.09,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.79,
+          "y": 0.78
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_17": {
+    "id": "base_21_17",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_17.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.16
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.42,
+          "y": 0.59
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.16,
+          "y": 0.49
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.88,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_18": {
+    "id": "base_21_18",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_18.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.16
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.22,
+          "y": 0.43
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.87,
+          "y": 0.49
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.27,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_19": {
+    "id": "base_21_19",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_19.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.16
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.53,
+          "y": 0.49
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.93,
+          "y": 0.79
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.12,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_20": {
+    "id": "base_21_20",
+    "name": "Monasterio Medieval",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": true,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_20.png",
+    "segments": [
+      {
+        "id": "monastery",
+        "type": "monastery",
+        "name": "Monasterio (Monje)",
+        "edges": [],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#e67e22"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.72,
+          "y": 0.2
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_21": {
+    "id": "base_21_21",
+    "name": "Monasterio Medieval",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": true,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_21.png",
+    "segments": [
+      {
+        "id": "monastery",
+        "type": "monastery",
+        "name": "Monasterio (Monje)",
+        "edges": [],
+        "pos": {
+          "x": 0.5,
+          "y": 0.42
+        },
+        "color": "#e67e22"
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.71,
+          "y": 0.85
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.83,
+          "y": 0.19
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_22": {
+    "id": "base_21_22",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_22.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.52,
+          "y": 0.52
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_23": {
+    "id": "base_21_23",
+    "name": "Cruce de Caminos",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_23.png",
+    "segments": [
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.84,
+          "y": 0.52
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.58,
+          "y": 0.88
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.09,
+          "y": 0.49
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.18
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.21,
+          "y": 0.79
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.79,
+          "y": 0.78
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_24": {
+    "id": "base_21_24",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_24.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.16
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.78,
+          "y": 0.46
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.13,
+          "y": 0.61
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.76,
+          "y": 0.9
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_25": {
+    "id": "base_21_25",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_25.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad Central (Caballero)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.59
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.14
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_south",
+        "type": "field",
+        "name": "Campo Sur (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.47,
+          "y": 0.94
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_26": {
+    "id": "base_21_26",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_26.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.51,
+          "y": 0.37
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.48,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_27": {
+    "id": "base_21_27",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_27.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.55,
+          "y": 0.11
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.44,
+          "y": 0.76
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_28": {
+    "id": "base_21_28",
+    "name": "Monasterio Medieval",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": true,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_28.png",
+    "segments": [
+      {
+        "id": "monastery",
+        "type": "monastery",
+        "name": "Monasterio (Monje)",
+        "edges": [],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#e67e22"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.81,
+          "y": 0.26
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_29": {
+    "id": "base_21_29",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_29.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "W"
+        ],
+        "pos": {
+          "x": 0.32,
+          "y": 0.32
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.85,
+          "y": 0.54
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "E_N",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.33,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.84,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_30": {
+    "id": "base_21_30",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_30.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.62,
+          "y": 0.32
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.61
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_31": {
+    "id": "base_21_31",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_31.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "W"
+        ],
+        "pos": {
+          "x": 0.32,
+          "y": 0.32
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.89,
+          "y": 0.52
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "E_N",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.32,
+          "y": 0.83
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.88,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_32": {
+    "id": "base_21_32",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "R",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_32.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.51,
+          "y": 0.35
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.8
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.3,
+          "y": 0.92
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior (Granjero)",
+        "edges": [
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.67,
+          "y": 0.92
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_33": {
+    "id": "base_21_33",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_33.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.37,
+          "y": 0.68
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.75,
+          "y": 0.25
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_34": {
+    "id": "base_21_34",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "R",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_34.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.61,
+          "y": 0.3
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.79
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.31,
+          "y": 0.91
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior (Granjero)",
+        "edges": [
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.74,
+          "y": 0.89
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_35": {
+    "id": "base_21_35",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_35.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.16
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.59,
+          "y": 0.62
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.87,
+          "y": 0.76
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.12,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_36": {
+    "id": "base_21_36",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_36.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "W"
+        ],
+        "pos": {
+          "x": 0.32,
+          "y": 0.32
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.85,
+          "y": 0.55
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "E_N",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.34,
+          "y": 0.92
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.85,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_37": {
+    "id": "base_21_37",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_37.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.64,
+          "y": 0.29
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.31,
+          "y": 0.76
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_38": {
+    "id": "base_21_38",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_38.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.53,
+          "y": 0.09
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.45,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_39": {
+    "id": "base_21_39",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_39.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.15
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.52
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.78
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.52
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.35
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.2,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "S_E",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.8,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_40": {
+    "id": "base_21_40",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_40.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.16
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.7,
+          "y": 0.56
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.58
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.88,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_41": {
+    "id": "base_21_41",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "F",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_41.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.54,
+          "y": 0.08
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.48,
+          "y": 0.58
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.39,
+          "y": 0.36
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior Sur (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.58,
+          "y": 0.84
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_42": {
+    "id": "base_21_42",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_42.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.15
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.52
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.78
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.52
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.35
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.2,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "S_E",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.8,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_43": {
+    "id": "base_21_43",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "C",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_43.png",
+    "segments": [
+      {
+        "id": "city_north",
+        "type": "city",
+        "name": "Ciudad Norte (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.1
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_center",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "W_S",
+          "W_N",
+          "E_N",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "city_south",
+        "type": "city",
+        "name": "Ciudad Sur (Caballero)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.9
+        },
+        "color": "#3498db"
+      }
+    ]
+  },
+  "base_21_44": {
+    "id": "base_21_44",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_44.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.67,
+          "y": 0.27
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.22,
+          "y": 0.79
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_45": {
+    "id": "base_21_45",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_45.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.52,
+          "y": 0.52
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.15,
+          "y": 0.7
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.85,
+          "y": 0.83
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_46": {
+    "id": "base_21_46",
+    "name": "Cruce de Caminos",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_46.png",
+    "segments": [
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.85,
+          "y": 0.55
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.58,
+          "y": 0.9
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.1,
+          "y": 0.49
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.18
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.2,
+          "y": 0.79
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.84
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_47": {
+    "id": "base_21_47",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "C",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_47.png",
+    "segments": [
+      {
+        "id": "city_W",
+        "type": "city",
+        "name": "Ciudad Oeste (Caballero)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.08,
+          "y": 0.5
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_center",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "city_S",
+        "type": "city",
+        "name": "Ciudad Sur (Caballero)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.92
+        },
+        "color": "#3498db"
+      }
+    ]
+  },
+  "base_21_48": {
+    "id": "base_21_48",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "R",
+      "F",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_48.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.53
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.18
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_south",
+        "type": "field",
+        "name": "Campo Sur (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.81
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_49": {
+    "id": "base_21_49",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_49.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.56,
+          "y": 0.51
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.81,
+          "y": 0.49
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_50": {
+    "id": "base_21_50",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "R",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_50.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.41,
+          "y": 0.51
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Norte/Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.17
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Sur/Oeste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N",
+          "N_W"
+        ],
+        "pos": {
+          "x": 0.24,
+          "y": 0.75
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_51": {
+    "id": "base_21_51",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": true,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_51.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.36
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.51,
+          "y": 0.85
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_52": {
+    "id": "base_21_52",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_52.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.54,
+          "y": 0.58
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.51
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_53": {
+    "id": "base_21_53",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_53.png",
+    "segments": [
+      {
+        "id": "city_W",
+        "type": "city",
+        "name": "Ciudad Oeste (Caballero)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.08,
+          "y": 0.48
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_center",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "S_W",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "city_E",
+        "type": "city",
+        "name": "Ciudad Este (Caballero)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.92,
+          "y": 0.48
+        },
+        "color": "#3498db"
+      }
+    ]
+  },
+  "base_21_54": {
+    "id": "base_21_54",
+    "name": "Monasterio Medieval",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": true,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_54.png",
+    "segments": [
+      {
+        "id": "monastery",
+        "type": "monastery",
+        "name": "Monasterio (Monje)",
+        "edges": [],
+        "pos": {
+          "x": 0.48,
+          "y": 0.47
+        },
+        "color": "#e67e22"
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.73,
+          "y": 0.83
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.77,
+          "y": 0.18
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_55": {
+    "id": "base_21_55",
+    "name": "Monasterio Medieval",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": true,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_55.png",
+    "segments": [
+      {
+        "id": "monastery",
+        "type": "monastery",
+        "name": "Monasterio (Monje)",
+        "edges": [],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#e67e22"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.21,
+          "y": 0.21
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_56": {
+    "id": "base_21_56",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_56.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.56,
+          "y": 0.55
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.81,
+          "y": 0.49
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_57": {
+    "id": "base_21_57",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "C",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_57.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad Sur (Caballero)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.4
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_58": {
+    "id": "base_21_58",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "F",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_58.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.61,
+          "y": 0.1
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.48,
+          "y": 0.6
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.24,
+          "y": 0.39
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior Sur (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.69,
+          "y": 0.87
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_21_59": {
+    "id": "base_21_59",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_21_59.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.65,
+          "y": 0.28
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.41,
+          "y": 0.61
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_00": {
+    "id": "base_22_00",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_00.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.43,
+          "y": 0.4
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.76,
+          "y": 0.24
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_01": {
+    "id": "base_22_01",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_01.png",
+    "segments": [
+      {
+        "id": "city_N",
+        "type": "city",
+        "name": "Ciudad Norte (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.08
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_center",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "W_S",
+          "W_N",
+          "S_W",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "city_E",
+        "type": "city",
+        "name": "Ciudad Este (Caballero)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.92,
+          "y": 0.5
+        },
+        "color": "#3498db"
+      }
+    ]
+  },
+  "base_22_02": {
+    "id": "base_22_02",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "F",
+      "R",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_02.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.53,
+          "y": 0.57
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.81,
+          "y": 0.49
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_03": {
+    "id": "base_22_03",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_03.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.52,
+          "y": 0.51
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.75,
+          "y": 0.24
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_04": {
+    "id": "base_22_04",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_04.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.48,
+          "y": 0.36
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_05": {
+    "id": "base_22_05",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_05.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.34,
+          "y": 0.44
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.75,
+          "y": 0.25
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_06": {
+    "id": "base_22_06",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_06.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "W"
+        ],
+        "pos": {
+          "x": 0.32,
+          "y": 0.32
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "E",
+          "S"
+        ],
+        "pos": {
+          "x": 0.79,
+          "y": 0.55
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo Central (Granjero)",
+        "edges": [
+          "E_N",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.31,
+          "y": 0.87
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Esquina Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.88,
+          "y": 0.88
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_07": {
+    "id": "base_22_07",
+    "name": "Camino Rural",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "F",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_07.png",
+    "segments": [
+      {
+        "id": "road_main",
+        "type": "road",
+        "name": "Camino (Bandido)",
+        "edges": [
+          "S",
+          "W"
+        ],
+        "pos": {
+          "x": 0.58,
+          "y": 0.54
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_corner",
+        "type": "field",
+        "name": "Campo Esquina Sur/Oeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Principal Norte/Este (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.75,
+          "y": 0.24
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_08": {
+    "id": "base_22_08",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_08.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.56,
+          "y": 0.11
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.38,
+          "y": 0.76
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_09": {
+    "id": "base_22_09",
+    "name": "Distrito de Ciudad",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "F",
+      "C",
+      "F",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_09.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad Central (Caballero)",
+        "edges": [
+          "E",
+          "W"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.44
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_north",
+        "type": "field",
+        "name": "Campo Norte (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.14
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_south",
+        "type": "field",
+        "name": "Campo Sur (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.86
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_10": {
+    "id": "base_22_10",
+    "name": "Cruce de Caminos",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "R",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_10.png",
+    "segments": [
+      {
+        "id": "road_N",
+        "type": "road",
+        "name": "Camino Norte (Bandido)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.15
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.9,
+          "y": 0.5
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.9
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.12,
+          "y": 0.53
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_NW",
+        "type": "field",
+        "name": "Campo Noroeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.21,
+          "y": 0.2
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_NE",
+        "type": "field",
+        "name": "Campo Noreste (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N"
+        ],
+        "pos": {
+          "x": 0.78,
+          "y": 0.21
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.78,
+          "y": 0.78
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.21,
+          "y": 0.79
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "base_22_11": {
+    "id": "base_22_11",
+    "name": "Ciudad con Camino",
+    "set": "base",
+    "type": "Standard",
+    "edges": [
+      "C",
+      "R",
+      "R",
+      "R"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": false,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/base_22_11.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.15
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "road_E",
+        "type": "road",
+        "name": "Camino Este (Bandido)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.82,
+          "y": 0.52
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_S",
+        "type": "road",
+        "name": "Camino Sur (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.78
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "road_W",
+        "type": "road",
+        "name": "Camino Oeste (Bandido)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.18,
+          "y": 0.52
+        },
+        "color": "#f39c12",
+        "isTerminus": true
+      },
+      {
+        "id": "field_near_city",
+        "type": "field",
+        "name": "Campo junto a Muralla (Granjero)",
+        "edges": [
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.35
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SW",
+        "type": "field",
+        "name": "Campo Suroeste (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.2,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_SE",
+        "type": "field",
+        "name": "Campo Sureste (Granjero)",
+        "edges": [
+          "S_E",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.8,
+          "y": 0.82
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_00": {
+    "id": "river_23_00",
+    "name": "Distrito de Ciudad",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "C",
+      "W",
+      "W",
+      "W"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_00.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N"
+        ],
+        "pos": {
+          "x": 0.52,
+          "y": 0.14
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.09,
+          "y": 0.83
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_2_qnh",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.86,
+          "y": 0.89
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "road_1_eh8",
+        "type": "river",
+        "name": "Río",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.39,
+          "y": 0.93
+        },
+        "color": "#3498db",
+        "noMeeple": true
+      },
+      {
+        "id": "field_3_zx6",
+        "type": "field",
+        "name": "Campo 3 (Granjero)",
+        "edges": [
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.1,
+          "y": 0.3
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_4_1ob",
+        "type": "field",
+        "name": "Campo 4 (Granjero)",
+        "edges": [
+          "E_N"
+        ],
+        "pos": {
+          "x": 0.91,
+          "y": 0.34
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_01": {
+    "id": "river_23_01",
+    "name": "Loseta river_23_01",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "W",
+      "F",
+      "F",
+      "W"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_01.png",
+    "segments": [
+      {
+        "id": "field_2_k7e",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "S_E",
+          "S_W",
+          "N_E",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.85,
+          "y": 0.64
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_2_6v8",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.2,
+          "y": 0.18
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_02": {
+    "id": "river_23_02",
+    "name": "Distrito de Ciudad",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "C",
+      "C",
+      "W",
+      "W"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_02.png",
+    "segments": [
+      {
+        "id": "city_main",
+        "type": "city",
+        "name": "Ciudad (Caballero)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.67,
+          "y": 0.24
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_main",
+        "type": "field",
+        "name": "Campo (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.06,
+          "y": 0.92
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_2_olp",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "S_E",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.74,
+          "y": 0.87
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_03": {
+    "id": "river_23_03",
+    "name": "Nacimiento del Río (Manantial)",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "F",
+      "W",
+      "F",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": true,
+    "isLake": false,
+    "image": "assets/tiles/river_23_03.png",
+    "segments": [
+      {
+        "id": "river_main",
+        "type": "river",
+        "name": "Río (Curva)",
+        "edges": [
+          "N",
+          "E"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#3498db",
+        "noMeeple": true
+      },
+      {
+        "id": "field_outer",
+        "type": "field",
+        "name": "Campo Exterior (Granjero)",
+        "edges": [
+          "S_E",
+          "S_W",
+          "W_S",
+          "W_N",
+          "N_W",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.3,
+          "y": 0.7
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_inner",
+        "type": "field",
+        "name": "Campo Interior (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N"
+        ],
+        "pos": {
+          "x": 0.8,
+          "y": 0.2
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_04": {
+    "id": "river_23_04",
+    "name": "Loseta river_23_04",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_04.png",
+    "segments": [
+      {
+        "id": "field_2_pre",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "N_E",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.89,
+          "y": 0.75
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_2_25x",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.59
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_05": {
+    "id": "river_23_05",
+    "name": "Loseta river_23_05",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "F",
+      "W",
+      "W",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_05.png",
+    "segments": [
+      {
+        "id": "field_1_l8b",
+        "type": "field",
+        "name": "Campo 1 (Granjero)",
+        "edges": [
+          "S_W",
+          "N_W",
+          "N_E",
+          "W_N",
+          "W_S",
+          "E_N"
+        ],
+        "pos": {
+          "x": 0.3,
+          "y": 0.25
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_2_qjk",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "S_E",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.85,
+          "y": 0.83
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_06": {
+    "id": "river_23_06",
+    "name": "Distrito de Ciudad",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "W",
+      "C",
+      "W",
+      "C"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_06.png",
+    "segments": [
+      {
+        "id": "city_E",
+        "type": "city",
+        "name": "Ciudad Este (Caballero)",
+        "edges": [
+          "E"
+        ],
+        "pos": {
+          "x": 0.84,
+          "y": 0.52
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "city_W",
+        "type": "city",
+        "name": "Ciudad Oeste (Caballero)",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.1,
+          "y": 0.49
+        },
+        "color": "#3498db"
+      },
+      {
+        "id": "field_2_0xv",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "N_E",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.69,
+          "y": 0.08
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_2_5xz",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "S_W",
+          "N_W"
+        ],
+        "pos": {
+          "x": 0.28,
+          "y": 0.91
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_07": {
+    "id": "river_23_07",
+    "name": "Loseta river_23_07",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "W",
+      "W",
+      "W",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_07.png",
+    "segments": [
+      {
+        "id": "road_1_mwd",
+        "type": "river",
+        "name": "Río",
+        "edges": [
+          "N",
+          "W"
+        ],
+        "pos": {
+          "x": 0.37,
+          "y": 0.29
+        },
+        "color": "#3498db",
+        "noMeeple": true
+      },
+      {
+        "id": "field_2_p0i",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "S_E",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.88,
+          "y": 0.83
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_3_rsa",
+        "type": "field",
+        "name": "Campo 3 (Granjero)",
+        "edges": [
+          "W_N",
+          "N_W"
+        ],
+        "pos": {
+          "x": 0.12,
+          "y": 0.12
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_08": {
+    "id": "river_23_08",
+    "name": "Desembocadura del Río (Lago)",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "W"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": true,
+    "image": "assets/tiles/river_23_08.png",
+    "segments": [
+      {
+        "id": "river_main",
+        "type": "river",
+        "name": "Río (Recto)",
+        "edges": [
+          "N",
+          "S"
+        ],
+        "pos": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "color": "#3498db",
+        "noMeeple": true
+      },
+      {
+        "id": "field_west",
+        "type": "field",
+        "name": "Campo Oeste (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N",
+          "W_S",
+          "S_W"
+        ],
+        "pos": {
+          "x": 0.2,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_east",
+        "type": "field",
+        "name": "Campo Este (Granjero)",
+        "edges": [
+          "N_E",
+          "E_N",
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.8,
+          "y": 0.5
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_09": {
+    "id": "river_23_09",
+    "name": "Aldea Rural",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "F",
+      "W",
+      "F",
+      "W"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_09.png",
+    "segments": [
+      {
+        "id": "monastery_1_hju",
+        "type": "monastery",
+        "name": "Monasterio 1 (Monje)",
+        "edges": [
+          "F"
+        ],
+        "pos": {
+          "x": 0.44,
+          "y": 0.4
+        },
+        "color": "#e67e22"
+      },
+      {
+        "id": "road_1_juh",
+        "type": "road",
+        "name": "Camino 1 (Bandido)",
+        "edges": [
+          "S"
+        ],
+        "pos": {
+          "x": 0.49,
+          "y": 0.88
+        },
+        "color": "#f39c12"
+      },
+      {
+        "id": "field_2_m59",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "S_E",
+          "E_S"
+        ],
+        "pos": {
+          "x": 0.9,
+          "y": 0.91
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_3_nmy",
+        "type": "field",
+        "name": "Campo 3 (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.17,
+          "y": 0.85
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_3_atm",
+        "type": "field",
+        "name": "Campo 3 (Granjero)",
+        "edges": [
+          "N_W",
+          "N_E",
+          "E_N",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.77,
+          "y": 0.15
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_10": {
+    "id": "river_23_10",
+    "name": "Aldea Rural",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "W"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_10.png",
+    "segments": [
+      {
+        "id": "field_2_tci",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "S_W",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.1,
+          "y": 0.89
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_3_v2v",
+        "type": "field",
+        "name": "Campo 3 (Granjero)",
+        "edges": [
+          "E_N",
+          "N_E"
+        ],
+        "pos": {
+          "x": 0.81,
+          "y": 0.17
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "road_1_8ps",
+        "type": "river",
+        "name": "Río",
+        "edges": [
+          "W"
+        ],
+        "pos": {
+          "x": 0.74,
+          "y": 0.58
+        },
+        "color": "#3498db",
+        "noMeeple": true
+      },
+      {
+        "id": "field_4_ecm",
+        "type": "field",
+        "name": "Campo 4 (Granjero)",
+        "edges": [
+          "E_S",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.74,
+          "y": 0.91
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_4_qau",
+        "type": "field",
+        "name": "Campo 4 (Granjero)",
+        "edges": [
+          "N_W",
+          "W_N"
+        ],
+        "pos": {
+          "x": 0.1,
+          "y": 0.17
+        },
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "river_23_11": {
+    "id": "river_23_11",
+    "name": "Loseta river_23_11",
+    "set": "river",
+    "type": "River",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "shield": false,
+    "monastery": false,
+    "isStartTile": false,
+    "isRiver": true,
+    "isSpring": false,
+    "isLake": false,
+    "image": "assets/tiles/river_23_11.png",
+    "segments": [
+      {
+        "id": "field_2_ic4",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "E_N",
+          "E_S",
+          "N_E",
+          "S_E"
+        ],
+        "pos": {
+          "x": 0.84,
+          "y": 0.53
+        },
+        "color": "#27ae60"
+      },
+      {
+        "id": "field_2_bbr",
+        "type": "field",
+        "name": "Campo 2 (Granjero)",
+        "edges": [
+          "S_W",
+          "N_W",
+          "W_N",
+          "W_S"
+        ],
+        "pos": {
+          "x": 0.15,
+          "y": 0.61
+        },
+        "color": "#27ae60"
+      }
+    ]
+  }
+}

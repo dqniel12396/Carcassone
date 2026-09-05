@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="castleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#1e293b"/>
+  <!-- Castle silhouette -->
+  <path d="M 14,24 L 20,24 L 20,28 L 24,28 L 24,24 L 28,24 L 28,28 L 32,28 L 32,24 L 36,24 L 36,28 L 40,28 L 40,24 L 44,24 L 44,28 L 50,28 L 50,50 L 38,50 L 38,40 C 38,36 26,36 26,40 L 26,50 L 14,50 Z" fill="url(#castleGrad)"/>
+  <circle cx="32" cy="18" r="3" fill="#f59e0b"/>
+</svg>

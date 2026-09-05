@@ -1,0 +1,1178 @@
+[
+  {
+    "id": "base_21_00",
+    "image": "assets/tiles/base_21_00.png",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_01",
+    "image": "assets/tiles/base_21_01.png",
+    "edges": [
+      "F",
+      "C",
+      "F",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_02",
+    "image": "assets/tiles/base_21_02.png",
+    "edges": [
+      "C",
+      "C",
+      "W",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_03",
+    "image": "assets/tiles/base_21_03.png",
+    "edges": [
+      "R",
+      "W",
+      "F",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_04",
+    "image": "assets/tiles/base_21_04.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_05",
+    "image": "assets/tiles/base_21_05.png",
+    "edges": [
+      "C",
+      "R",
+      "C",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_06",
+    "image": "assets/tiles/base_21_06.png",
+    "edges": [
+      "C",
+      "F",
+      "C",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_07",
+    "image": "assets/tiles/base_21_07.png",
+    "edges": [
+      "F",
+      "W",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_08",
+    "image": "assets/tiles/base_21_08.png",
+    "edges": [
+      "C",
+      "W",
+      "F",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_09",
+    "image": "assets/tiles/base_21_09.png",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "C",
+    "monastery": true,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_10",
+    "image": "assets/tiles/base_21_10.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_11",
+    "image": "assets/tiles/base_21_11.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_12",
+    "image": "assets/tiles/base_21_12.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_13",
+    "image": "assets/tiles/base_21_13.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_14",
+    "image": "assets/tiles/base_21_14.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_15",
+    "image": "assets/tiles/base_21_15.png",
+    "edges": [
+      "C",
+      "W",
+      "F",
+      "C"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_16",
+    "image": "assets/tiles/base_21_16.png",
+    "edges": [
+      "F",
+      "W",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_17",
+    "image": "assets/tiles/base_21_17.png",
+    "edges": [
+      "C",
+      "W",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_18",
+    "image": "assets/tiles/base_21_18.png",
+    "edges": [
+      "C",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_19",
+    "image": "assets/tiles/base_21_19.png",
+    "edges": [
+      "C",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_20",
+    "image": "assets/tiles/base_21_20.png",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "C",
+    "monastery": true,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_21",
+    "image": "assets/tiles/base_21_21.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_22",
+    "image": "assets/tiles/base_21_22.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_23",
+    "image": "assets/tiles/base_21_23.png",
+    "edges": [
+      "F",
+      "W",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_24",
+    "image": "assets/tiles/base_21_24.png",
+    "edges": [
+      "C",
+      "W",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_25",
+    "image": "assets/tiles/base_21_25.png",
+    "edges": [
+      "F",
+      "W",
+      "F",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_26",
+    "image": "assets/tiles/base_21_26.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_27",
+    "image": "assets/tiles/base_21_27.png",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_28",
+    "image": "assets/tiles/base_21_28.png",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "C",
+    "monastery": true,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_29",
+    "image": "assets/tiles/base_21_29.png",
+    "edges": [
+      "C",
+      "W",
+      "F",
+      "C"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_30",
+    "image": "assets/tiles/base_21_30.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_31",
+    "image": "assets/tiles/base_21_31.png",
+    "edges": [
+      "C",
+      "W",
+      "W",
+      "C"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_32",
+    "image": "assets/tiles/base_21_32.png",
+    "edges": [
+      "C",
+      "C",
+      "W",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_33",
+    "image": "assets/tiles/base_21_33.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_34",
+    "image": "assets/tiles/base_21_34.png",
+    "edges": [
+      "C",
+      "C",
+      "W",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_35",
+    "image": "assets/tiles/base_21_35.png",
+    "edges": [
+      "C",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_36",
+    "image": "assets/tiles/base_21_36.png",
+    "edges": [
+      "C",
+      "W",
+      "F",
+      "C"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_37",
+    "image": "assets/tiles/base_21_37.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_38",
+    "image": "assets/tiles/base_21_38.png",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_39",
+    "image": "assets/tiles/base_21_39.png",
+    "edges": [
+      "C",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_40",
+    "image": "assets/tiles/base_21_40.png",
+    "edges": [
+      "C",
+      "W",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_41",
+    "image": "assets/tiles/base_21_41.png",
+    "edges": [
+      "C",
+      "W",
+      "F",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_42",
+    "image": "assets/tiles/base_21_42.png",
+    "edges": [
+      "C",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_43",
+    "image": "assets/tiles/base_21_43.png",
+    "edges": [
+      "C",
+      "F",
+      "C",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_44",
+    "image": "assets/tiles/base_21_44.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_45",
+    "image": "assets/tiles/base_21_45.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_46",
+    "image": "assets/tiles/base_21_46.png",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "W"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_47",
+    "image": "assets/tiles/base_21_47.png",
+    "edges": [
+      "F",
+      "F",
+      "C",
+      "C"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_48",
+    "image": "assets/tiles/base_21_48.png",
+    "edges": [
+      "F",
+      "W",
+      "F",
+      "W"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_49",
+    "image": "assets/tiles/base_21_49.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_50",
+    "image": "assets/tiles/base_21_50.png",
+    "edges": [
+      "W",
+      "W",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_51",
+    "image": "assets/tiles/base_21_51.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_52",
+    "image": "assets/tiles/base_21_52.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_53",
+    "image": "assets/tiles/base_21_53.png",
+    "edges": [
+      "F",
+      "C",
+      "F",
+      "C"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_54",
+    "image": "assets/tiles/base_21_54.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_55",
+    "image": "assets/tiles/base_21_55.png",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "C",
+    "monastery": true,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_56",
+    "image": "assets/tiles/base_21_56.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_57",
+    "image": "assets/tiles/base_21_57.png",
+    "edges": [
+      "F",
+      "F",
+      "C",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_58",
+    "image": "assets/tiles/base_21_58.png",
+    "edges": [
+      "C",
+      "W",
+      "F",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_21_59",
+    "image": "assets/tiles/base_21_59.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_00",
+    "image": "assets/tiles/base_22_00.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_01",
+    "image": "assets/tiles/base_22_01.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_02",
+    "image": "assets/tiles/base_22_02.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_03",
+    "image": "assets/tiles/base_22_03.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_04",
+    "image": "assets/tiles/base_22_04.png",
+    "edges": [
+      "C",
+      "C",
+      "F",
+      "C"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_05",
+    "image": "assets/tiles/base_22_05.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_06",
+    "image": "assets/tiles/base_22_06.png",
+    "edges": [
+      "C",
+      "W",
+      "W",
+      "C"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_07",
+    "image": "assets/tiles/base_22_07.png",
+    "edges": [
+      "F",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_08",
+    "image": "assets/tiles/base_22_08.png",
+    "edges": [
+      "C",
+      "F",
+      "F",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_09",
+    "image": "assets/tiles/base_22_09.png",
+    "edges": [
+      "F",
+      "C",
+      "F",
+      "W"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_10",
+    "image": "assets/tiles/base_22_10.png",
+    "edges": [
+      "W",
+      "W",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "base_22_11",
+    "image": "assets/tiles/base_22_11.png",
+    "edges": [
+      "C",
+      "F",
+      "W",
+      "W"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": false
+  },
+  {
+    "id": "river_23_00",
+    "image": "assets/tiles/river_23_00.png",
+    "edges": [
+      "C",
+      "W",
+      "F",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_01",
+    "image": "assets/tiles/river_23_01.png",
+    "edges": [
+      "W",
+      "F",
+      "F",
+      "W"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_02",
+    "image": "assets/tiles/river_23_02.png",
+    "edges": [
+      "C",
+      "C",
+      "W",
+      "W"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_03",
+    "image": "assets/tiles/river_23_03.png",
+    "edges": [
+      "F",
+      "W",
+      "F",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_04",
+    "image": "assets/tiles/river_23_04.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_05",
+    "image": "assets/tiles/river_23_05.png",
+    "edges": [
+      "F",
+      "W",
+      "W",
+      "F"
+    ],
+    "center": "F",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_06",
+    "image": "assets/tiles/river_23_06.png",
+    "edges": [
+      "W",
+      "C",
+      "W",
+      "C"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_07",
+    "image": "assets/tiles/river_23_07.png",
+    "edges": [
+      "W",
+      "W",
+      "W",
+      "W"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_08",
+    "image": "assets/tiles/river_23_08.png",
+    "edges": [
+      "F",
+      "F",
+      "F",
+      "W"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_09",
+    "image": "assets/tiles/river_23_09.png",
+    "edges": [
+      "F",
+      "W",
+      "W",
+      "W"
+    ],
+    "center": "C",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_10",
+    "image": "assets/tiles/river_23_10.png",
+    "edges": [
+      "W",
+      "W",
+      "W",
+      "F"
+    ],
+    "center": "R",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  },
+  {
+    "id": "river_23_11",
+    "image": "assets/tiles/river_23_11.png",
+    "edges": [
+      "W",
+      "F",
+      "W",
+      "F"
+    ],
+    "center": "W",
+    "monastery": false,
+    "shield": false,
+    "river": true
+  }
+]

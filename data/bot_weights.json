@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "description": "Pesos heurísticos del Bot de Carcassonne. Modificar para ajustar la estrategia del bot.",
+  "weights": {
+    "cityValue": 8.91,
+    "roadValue": 1.51,
+    "monasteryValue": 9.85,
+    "fieldValue": 2,
+    "fieldLateGameValue": 15,
+    "completionBonus": 30.55,
+    "completionMeepleRecoveryBonus": 30,
+    "monasteryNeighborBonus": 10,
+    "monasteryOpponentPenalty": 2,
+    "monasteryNewPlacementBonus": 4,
+    "blockingPenalty": 12,
+    "blockingPenaltyEasy": 2,
+    "centerBoardBonus": 5,
+    "expandOwnCityMultiplier": 8.42,
+    "expandOwnRoadMultiplier": 3,
+    "meepleThresholdLowTiles": 25,
+    "meepleReservationTiles": 15
+  },
+  "difficulty": {
+    "easy": {
+      "meepleThreshold": 2,
+      "completionSeeking": true,
+      "randomness": 0.6
+    },
+    "medium": {
+      "meepleThreshold": 5,
+      "completionSeeking": true,
+      "randomness": 0
+    },
+    "hard": {
+      "meepleThreshold": 7,
+      "completionSeeking": true,
+      "randomness": 0
+    }
+  },
+  "trainingSessions": 16,
+  "lastTrainedAt": "2026-09-02T04:30:12.767Z",
+  "lastTrainingMethod": "self_play_evolutionary"
+}

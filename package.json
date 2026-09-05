@@ -1,0 +1,21 @@
+{
+  "name": "carcassonne-web",
+  "version": "1.0.0",
+  "description": "Carcassonne Web Server with Realtime Multiplayer & Sandbox for CasaOS",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "keywords": ["carcassonne", "boardgame", "casaos", "tabletop", "multiplayer"],
+  "author": "Antigravity",
+  "license": "MIT"
+}

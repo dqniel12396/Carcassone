@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#161311">
+  <title>Carcassonne: War Room - The Grand Table</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=9.1">
+  <script>
+    window.openAuthModal = function() {
+      const p = document.getElementById('profile-modal'); if (p) p.style.setProperty('display', 'none', 'important');
+      const a = document.getElementById('admin-panel-modal'); if (a) a.style.setProperty('display', 'none', 'important');
+      const m = document.getElementById('auth-modal');
+      if (m) {
+        m.style.setProperty('display', 'flex', 'important');
+        m.style.setProperty('visibility', 'visible', 'important');
+        m.style.setProperty('opacity', '1', 'important');
+        m.style.setProperty('z-index', '999999', 'important');
+        const loginTab = document.getElementById('auth-tab-login-btn');
+        const regTab = document.getElementById('auth-tab-reg-btn');
+        const loginForm = document.getElementById('auth-login-form');
+        const regForm = document.getElementById('auth-register-form');
+        if (loginTab) loginTab.classList.add('active');
+        if (regTab) regTab.classList.remove('active');
+        if (loginForm) {
+          loginForm.classList.add('active');
+          loginForm.style.setProperty('display', 'flex', 'important');
+        }
+        if (regForm) {
+          regForm.classList.remove('active');
+          regForm.style.setProperty('display', 'none', 'important');
+        }
+        setTimeout(() => { const u = document.getElementById('auth-login-username'); if(u) u.focus(); }, 60);
+      }
+    };
+    window.closeAuthModal = function() {
+      const m = document.getElementById('auth-modal');
+      if (m) {
+        m.style.setProperty('display', 'none', 'important');
+      }
+    };
+    window.openProfileModal = function() {
+      const a = document.getElementById('auth-modal'); if (a) a.style.setProperty('display', 'none', 'important');
+      const m = document.getElementById('profile-modal');
+      if (m) {
+        m.style.setProperty('display', 'flex', 'important');
+        if (window.profileManager) window.profileManager.updateUI();
+      }
+    };
+    window.closeProfileModal = function() {
+      const m = document.getElementById('profile-modal');
+      if (m) m.style.setProperty('display', 'none', 'important');
+    };
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- LOBBY VIEW -->
+    <div id="lobby-view">
+      <div class="lobby-container">
+        <div class="lobby-header">
+          <div class="lobby-title-area">
+            <h1>🏰 Carcassonne: War Room</h1>
+            <p>La Gran Mesa • Edición Táctica Medieval con IA, Modo Local y Multijugador</p>
+          </div>
+          
+          <!-- Player Profile Quick Card -->
+          <div class="lobby-profile-card">
+            <div class="profile-avatar-badge open-profile-modal-btn" title="Haz clic para cambiar avatar y ver estadísticas">
+              <span id="lobby-profile-avatar-icon" class="avatar-icon-large">👑</span>
+            </div>
+            <div class="profile-info-block">
+              <div class="profile-name-title-row">
+                <h3 id="lobby-profile-name-text">Noble</h3>
+                <span id="lobby-profile-title-text" class="profile-role-tag">Monarca de Carcassonne</span>
+                <span id="lobby-auth-status-badge" class="auth-pill-badge guest" title="Modo Invitado">👤 Invitado</span>
+              </div>
+              <span id="lobby-profile-stats-summary" class="profile-stats-mini">🏆 0 Victorias • 🎮 0 Partidas</span>
+            </div>
+            <div class="lobby-profile-btns-col" style="display:flex; flex-direction:column; gap:4px; margin-left:auto;">
+              <button type="button" id="lobby-auth-action-btn" class="btn btn-sm btn-primary open-auth-modal-btn" onclick="window.openAuthModal && window.openAuthModal();">
+                🔑 Iniciar Sesión
+              </button>
+              <button type="button" class="btn btn-xs btn-secondary open-profile-modal-btn" onclick="window.openProfileModal && window.openProfileModal();">
+                👤 Mi Perfil
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lobby-tabs-nav">
+          <button id="tab-btn-online" class="lobby-tab-btn active" data-lobby-tab="online">
+            <span class="tab-icon">🌐</span> <span class="tab-text-full">Multijugador Online</span><span class="tab-text-short">Online</span>
+          </button>
+          <button id="tab-btn-local" class="lobby-tab-btn" data-lobby-tab="local">
+            <span class="tab-icon">🎮</span> <span class="tab-text-full">Modo Local / Vs Bots</span><span class="tab-text-short">Local / Bots</span>
+          </button>
+          <button id="tab-btn-replays" class="lobby-tab-btn" data-lobby-tab="replays">
+            <span class="tab-icon">📜</span> <span class="tab-text-full">Crónicas y Replays</span><span class="tab-text-short">Crónicas</span>
+          </button>
+          <button id="tab-btn-leaderboard" class="lobby-tab-btn" data-lobby-tab="leaderboard">
+            <span class="tab-icon">🏆</span> <span class="tab-text-full">Clasificación Global</span><span class="tab-text-short">Ranking</span>
+          </button>
+          <button id="lobby-editor-btn" class="lobby-tab-btn tab-btn-accent">
+            <span class="tab-icon">🎨</span> <span class="tab-text-full">Editor de Puntos</span><span class="tab-text-short">Editor</span>
+          </button>
+          <button id="tab-btn-bot-training" class="lobby-tab-btn" data-lobby-tab="bot-training">
+            <span class="tab-icon">🤖</span> <span class="tab-text-full">Entrenar Bot</span><span class="tab-text-short">Bot IA</span>
+          </button>
+          <button id="tab-btn-admin" class="lobby-tab-btn tab-btn-admin" style="display:none;" title="Panel de Administración">
+            <span class="tab-icon">👑</span> <span class="tab-text-full">Admin Real</span><span class="tab-text-short">Admin</span>
+          </button>
+          <button id="lobby-tiles-guide-btn" class="lobby-tab-btn" title="Consultar Catálogo de Fichas del Juego">
+            <span class="tab-icon">🗺️</span> <span class="tab-text-full">Guía de Fichas</span><span class="tab-text-short">Fichas</span>
+          </button>
+          <button class="lobby-tab-btn open-profile-modal-btn tab-btn-profile">
+            <span class="tab-icon">👤</span> <span>Perfil</span>
+          </button>
+          <button class="lobby-tab-btn sound-toggle-btn" title="Activar / Desactivar Sonido">
+            <span class="tab-icon">🔊</span> <span>Sonido</span>
+          </button>
+        </div>
+
+        <!-- ONLINE TAB CONTENT -->
+        <div id="lobby-online-content" class="lobby-tab-pane active">
+          <div class="lobby-grid lobby-three-col-grid">
+            <!-- Create Room Form -->
+            <div class="panel-card">
+              <h3>⚔️ Crear Nueva Sala</h3>
+              <div class="form-group">
+                <label>Tu Nombre de Comandante</label>
+                <input type="text" id="player-name-input" class="form-control" placeholder="Ej: Sir Daniel" maxlength="16">
+              </div>
+
+              <div class="form-group">
+                <label>Color de Meeple Preferido</label>
+                <select id="preferred-color-select" class="form-control">
+                  <option value="red">🔴 Rojo</option>
+                  <option value="blue">🔵 Azul</option>
+                  <option value="green">🟢 Verde</option>
+                  <option value="yellow" selected>🟡 Amarillo</option>
+                  <option value="black">⚫ Negro</option>
+                  <option value="pink">🌸 Rosa</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Nombre de la Sala</label>
+                <input type="text" id="room-name-input" class="form-control" placeholder="Ej: Partida de Amigos">
+              </div>
+
+              <div class="form-group form-check">
+                <input type="checkbox" id="include-river-checkbox">
+                <label for="include-river-checkbox">🌊 Incluir Expansión El Río (12 losetas)</label>
+              </div>
+
+              <div class="form-group form-check">
+                <input type="checkbox" id="sandbox-mode-checkbox">
+                <label for="sandbox-mode-checkbox">🛠️ Activar Modo Sandbox (Libertad total tipo TTS)</label>
+              </div>
+
+              <button id="create-room-btn" class="btn btn-primary btn-block">🚀 Crear y Entrar a la Sala</button>
+            </div>
+
+            <!-- Active Rooms & Saved Games -->
+            <div class="panel-card">
+              <h3>🌐 Salas Disponibles <button id="refresh-rooms-btn" class="btn btn-xs btn-secondary">🔄</button></h3>
+              <div id="rooms-list" class="scroll-list">
+                <div class="empty-hint">Cargando salas...</div>
+              </div>
+
+              <hr style="margin: 16px 0; border: 0; border-top: 1px solid var(--border-glass);">
+
+              <h3>💾 Partidas Guardadas</h3>
+              <div id="saves-list" class="scroll-list">
+                <div class="empty-hint">No hay partidas guardadas aún.</div>
+              </div>
+            </div>
+
+            <!-- Global Lobby Tavern Chat -->
+            <div class="panel-card lobby-chat-card">
+              <div class="card-header-row">
+                <h3>🍺 Taberna del Reino (Chat Global)</h3>
+                <span class="badge badge-success" style="font-size:0.75rem;">🟢 En Línea</span>
+              </div>
+              <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:8px;">Habla con los comandantes conectados en el reino:</p>
+              <div id="lobby-chat-messages" class="lobby-chat-messages scroll-list">
+                <div class="empty-hint">Bienvenido a la Taberna del Reino. Escribe un mensaje...</div>
+              </div>
+              <div class="lobby-chat-input-row" style="display:flex; gap:6px; margin-top:8px;">
+                <input type="text" id="lobby-chat-input" class="form-control" placeholder="Escribe a la taberna..." maxlength="140">
+                <button id="send-lobby-chat-btn" class="btn btn-primary btn-sm">Enviar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCAL TAB CONTENT -->
+        <div id="lobby-local-content" class="lobby-tab-pane" style="display:none;">
+          <div class="panel-card local-setup-card">
+            <h3>🎮 Configurar Partida Local (Misma Pantalla o Contra Bots)</h3>
+            <p class="section-desc">Juega sin necesidad de conexión en red. Puedes agregar jugadores humanos para jugar por turnos o desafiar a la IA en distintas dificultades.</p>
+
+            <div class="local-players-builder">
+              <div class="local-players-header">
+                <h4>👥 Jugadores y Bots (<span id="local-players-count">2</span>/6)</h4>
+                <div class="local-builder-actions">
+                  <button type="button" class="btn btn-sm btn-outline-gold" onclick="window.openTilesGuideModal && window.openTilesGuideModal();" title="Consultar Fichas">🗺️ Ver Fichas</button>
+                  <button id="add-local-human-btn" class="btn btn-sm btn-secondary">👤 + Humano</button>
+                  <button id="add-local-bot-btn" class="btn btn-sm btn-secondary">🤖 + Bot</button>
+                </div>
+              </div>
+
+              <div id="local-players-list" class="local-players-list">
+                <!-- Dynamically filled with player rows -->
+              </div>
+            </div>
+
+            <div class="local-options-grid">
+              <div class="form-group form-check">
+                <input type="checkbox" id="local-river-checkbox">
+                <label for="local-river-checkbox">🌊 Incluir Expansión El Río</label>
+              </div>
+              <div class="form-group form-check">
+                <input type="checkbox" id="local-sandbox-checkbox">
+                <label for="local-sandbox-checkbox">🛠️ Modo Sandbox</label>
+              </div>
+            </div>
+
+            <button type="button" id="start-local-game-btn" class="btn btn-primary btn-block btn-lg" onclick="window.startLocalGame && window.startLocalGame();">🚀 ¡Iniciar Partida Local!</button>
+          </div>
+        </div>
+
+        <!-- REPLAYS & CHRONICLES TAB CONTENT -->
+        <div id="lobby-replays-content" class="lobby-tab-pane">
+          <div class="panel-card" style="max-width: 900px; margin: 0 auto;">
+            <div class="card-header-row">
+              <h3>📜 Crónicas de Batallas & Análisis IA</h3>
+              <button id="refresh-replays-btn" class="btn btn-xs btn-secondary" title="Actualizar lista">🔄 Actualizar</button>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">
+              Revisa el historial de tus partidas, reproduce jugada por jugada con el <strong>Reproductor de Película</strong> y consulta el veredicto de <strong>El Sabio de la Torre (IA)</strong>.
+            </p>
+            <div id="replays-list" class="replays-list">
+              <div class="empty-state">Cargando crónicas del reino...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEADERBOARD TAB CONTENT -->
+        <div id="lobby-leaderboard-content" class="lobby-tab-pane" style="display:none;">
+          <div class="panel-card" style="max-width: 900px; margin: 0 auto;">
+            <div class="card-header-row">
+              <h3>🏆 Tabla Clasificatoria de Grandes Maestres</h3>
+              <button id="refresh-leaderboard-btn" class="btn btn-xs btn-secondary">🔄 Actualizar</button>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">
+              Registro oficial de los comandantes más laureados en el reino de Carcassonne.
+            </p>
+            <div id="leaderboard-table-container" class="leaderboard-table-container">
+              <div class="empty-hint">Cargando clasificación...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOT TRAINING TAB CONTENT -->
+        <div id="lobby-bot-training-content" class="lobby-tab-pane" style="display:none;">
+          <div class="panel-card" style="max-width: 900px; margin: 0 auto;">
+            <div class="card-header-row">
+              <h3>🤖 Centro de Entrenamiento del Bot</h3>
+              <button id="refresh-bot-weights-btn" class="btn btn-xs btn-secondary">🔄 Actualizar</button>
+            </div>
+            <p style="color:var(--on-surface-variant); font-size:0.9rem; margin-bottom:20px;">
+              Usa los tres métodos de entrenamiento para mejorar progresivamente la inteligencia del bot.<br>
+              Los cambios se aplican automáticamente en la próxima partida — sin reiniciar el servidor.
+            </p>
+
+            <!-- Current Weights -->
+            <div id="bot-weights-summary" style="background:var(--surface-container-high); border:1px solid var(--border-iron); border-radius:6px; padding:14px; margin-bottom:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong style="color:var(--primary); font-family:var(--font-heading);">📊 Pesos Actuales del Bot</strong>
+                <span id="bot-training-sessions" style="font-size:0.8rem; color:var(--on-surface-variant);"></span>
+              </div>
+              <div id="bot-weights-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:8px; font-size:0.82rem;">
+                <div style="color:var(--on-surface-variant);">Cargando pesos...</div>
+              </div>
+            </div>
+
+            <!-- Training Methods -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px;">
+              
+              <!-- Method 1: Imitation Learning -->
+              <div style="background:var(--surface-container-low); border:1px solid var(--border-iron); border-radius:6px; padding:16px;">
+                <div style="font-size:1.4rem; margin-bottom:8px;">📚</div>
+                <h4 style="color:var(--primary); font-family:var(--font-heading); margin-bottom:8px;">Aprendizaje por Imitación</h4>
+                <p style="font-size:0.83rem; color:var(--on-surface-variant); margin-bottom:14px;">
+                  Analiza tus replays guardados y ajusta los pesos del bot para imitar las estrategias ganadoras.
+                </p>
+                <button id="btn-train-replays" class="btn btn-sm" style="width:100%; background:linear-gradient(to bottom,#2d4a1e,#1a2d10); border:1px solid #3d6b2e; color:#82e0aa;">
+                  📚 Entrenar desde Replays
+                </button>
+                <div id="train-replays-result" style="margin-top:10px; font-size:0.8rem; display:none;"></div>
+              </div>
+
+              <!-- Method 2: Gemini AI -->
+              <div style="background:var(--surface-container-low); border:1px solid var(--border-iron); border-radius:6px; padding:16px;">
+                <div style="font-size:1.4rem; margin-bottom:8px;">🧙‍♂️</div>
+                <h4 style="color:var(--primary); font-family:var(--font-heading); margin-bottom:8px;">Optimización con Gemini</h4>
+                <p style="font-size:0.83rem; color:var(--on-surface-variant); margin-bottom:14px;">
+                  El Sabio de la Torre analiza las estadísticas y sugiere los mejores pesos usando IA avanzada.
+                </p>
+                <button id="btn-train-gemini" class="btn btn-sm" style="width:100%; background:linear-gradient(to bottom,#1a1a4a,#0d0d2b); border:1px solid #3d3db0; color:#85c1e9;">
+                  🧙‍♂️ Optimizar con IA Gemini
+                </button>
+                <div id="train-gemini-result" style="margin-top:10px; font-size:0.8rem; display:none;"></div>
+              </div>
+
+              <!-- Method 3: Self-Play -->
+              <div style="background:var(--surface-container-low); border:1px solid var(--border-iron); border-radius:6px; padding:16px;">
+                <div style="font-size:1.4rem; margin-bottom:8px;">⚔️</div>
+                <h4 style="color:var(--primary); font-family:var(--font-heading); margin-bottom:8px;">Self-Play Autónomo</h4>
+                <p style="font-size:0.83rem; color:var(--on-surface-variant); margin-bottom:8px;">
+                  El bot juega contra sí mismo y mejora sus pesos automáticamente.
+                </p>
+                <div style="display:flex; gap:6px; margin-bottom:10px;">
+                  <label style="font-size:0.78rem; color:var(--on-surface-variant); align-self:center;">Partidas:</label>
+                  <input id="selfplay-games-input" type="number" value="150" min="50" max="500" step="50" class="form-control" style="max-width:70px; font-size:0.82rem; padding:4px 8px;">
+                  <label style="font-size:0.78rem; color:var(--on-surface-variant); align-self:center;">Iters:</label>
+                  <input id="selfplay-iters-input" type="number" value="4" min="2" max="10" class="form-control" style="max-width:50px; font-size:0.82rem; padding:4px 8px;">
+                </div>
+                <button id="btn-train-selfplay" class="btn btn-sm" style="width:100%; background:linear-gradient(to bottom,#4a1a1a,#2b0f0f); border:1px solid #b03d3d; color:#f1948a;">
+                  ⚔️ Iniciar Self-Play
+                </button>
+                <div id="train-selfplay-result" style="margin-top:10px; font-size:0.8rem; display:none;"></div>
+                <div id="selfplay-progress" style="margin-top:8px; display:none;">
+                  <div style="height:4px; background:var(--border-iron); border-radius:2px; overflow:hidden; margin-bottom:6px;">
+                    <div id="selfplay-progress-bar" style="height:100%; width:0%; background:var(--primary); transition:width 0.4s;"></div>
+                  </div>
+                  <div id="selfplay-progress-text" style="font-size:0.75rem; color:var(--on-surface-variant);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Training Log -->
+            <div id="bot-training-log" style="margin-top:20px; background:var(--surface-container-lowest); border:1px solid var(--border-iron); border-radius:4px; padding:12px; max-height:180px; overflow-y:auto; font-family:monospace; font-size:0.78rem; color:var(--secondary); display:none;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WAR ROOM (PRE-GAME BRIEFING VIEW) -->
+    <div id="war-room-view" style="display:none;">
+      <div class="war-room-container">
+        <div class="war-room-header">
+          <div class="war-room-title-area">
+            <span class="war-room-badge">⚔️ SALA DE GUERRA</span>
+            <h1 id="war-room-title">Siege of Carcassonne</h1>
+            <p id="war-room-subtitle">Preparación de la Batalla • Reúne a tus tropas y comandantes</p>
+          </div>
+          <div class="war-room-code-box">
+            <span class="code-label">CÓDIGO DE SALA:</span>
+            <span id="war-room-code" class="code-value">ROOM_ID</span>
+          </div>
+        </div>
+
+        <div class="war-room-grid">
+          <!-- Left Plaque: Commanders & Troops (Player List) -->
+          <div class="panel-card war-room-players-card">
+            <div class="card-header-row">
+              <h3>👥 Comandantes Unidos (<span id="war-room-player-count">1</span>/6)</h3>
+              <button id="war-room-add-bot-btn" class="btn btn-sm btn-secondary">🤖 + Bot</button>
+            </div>
+            
+            <div id="war-room-players-list" class="war-room-players-list">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div class="war-room-color-picker-box">
+              <label>Tu Estandarte / Color de Meeple:</label>
+              <select id="war-room-color-select" class="form-control">
+                <option value="red">🔴 Rojo</option>
+                <option value="blue">🔵 Azul</option>
+                <option value="green">🟢 Verde</option>
+                <option value="yellow">🟡 Amarillo</option>
+                <option value="black">⚫ Negro</option>
+                <option value="pink">🌸 Rosa</option>
+              </select>
+            </div>
+
+              <!-- Custom Turn Sound Selector & Preview -->
+              <div class="war-room-sound-box" style="margin-top:14px;">
+                <label style="font-size:0.85rem; color:var(--on-surface-variant); font-weight:600; display:block; margin-bottom:6px;">📯 Tu Alerta de Turno:</label>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <select id="war-room-sound-select" class="form-control" style="flex:1;">
+                    <option value="horn">📯 Cuerno de Batalla</option>
+                    <option value="trumpets">🎺 Fanfarria Real de Trompetas</option>
+                    <option value="sword">⚔️ Choque de Espadas de Acero</option>
+                    <option value="bell">🔔 Campanario Sagrado</option>
+                    <option value="drums">🥁 Tambores de Batalla</option>
+                    <option value="harp">🎵 Arpa Medieval</option>
+                    <option value="chant">✨ Canto de Abadía</option>
+                  </select>
+                  <button id="war-room-test-sound-btn" class="btn btn-sm btn-secondary" title="Escuchar sonido de prueba">🔊 Probar</button>
+                </div>
+              </div>
+          </div>
+
+          <!-- Right Plaque: Tactical Options & War Room Chat -->
+          <div class="panel-card war-room-tactical-card">
+            <h3>📜 Despacho de Órdenes & Chat</h3>
+            <div id="war-room-chat-box" class="war-room-chat-box">
+              <div id="war-room-chat-messages" class="chat-messages war-room-messages"></div>
+              <div class="chat-input-row">
+                <input type="text" id="war-room-chat-input" class="form-control" placeholder="Escribir mensaje a los comandantes...">
+                <button id="war-room-send-chat-btn" class="btn btn-primary btn-sm">Enviar</button>
+              </div>
+            </div>
+
+            <div class="war-room-options-box">
+              <span class="options-title">Configuración de la Partida:</span>
+              <div class="options-badges">
+                <span id="war-room-river-badge" class="badge badge-code">🌊 Río: Sí</span>
+                <span id="war-room-sandbox-badge" class="badge badge-code">🛠️ Reglas Oficiales</span>
+              </div>
+            </div>
+
+            <div class="war-room-actions" style="display:flex; flex-direction:column; gap:10px;">
+              <!-- Ready status toggle button -->
+              <button id="war-room-ready-btn" class="btn btn-block btn-lg" style="background:linear-gradient(135deg, #e67e22, #d35400); border-color:#f39c12; color:#fff; font-weight:700;">
+                ⚔️ ¡Estoy Listo!
+              </button>
+
+              <!-- Host Start button -->
+              <button id="war-room-start-btn" class="btn btn-primary btn-block btn-lg" style="display:none;">
+                🚀 ¡Iniciar la Batalla!
+              </button>
+
+              <div id="war-room-waiting-msg" class="waiting-msg" style="display:none;">
+                ⏳ Esperando a que todos los comandantes estén listos...
+              </div>
+
+              <!-- Delete Room button (Host only) -->
+              <button id="war-room-delete-btn" class="btn btn-danger btn-block" style="display:none; background:rgba(192, 57, 43, 0.85); border-color:#e74c3c; color:#fff;">
+                🗑️ Eliminar Sala
+              </button>
+
+              <button id="war-room-leave-btn" class="btn btn-secondary btn-block">
+                🚪 Abandonar la Sala de Guerra
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME VIEW -->
+    <div id="game-view" style="display:none;">
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div class="nav-left">
+          <button id="mobile-menu-toggle" class="btn btn-sm btn-secondary mobile-only" title="Ver jugadores y mano">👥 <span class="mobile-btn-text">Partida</span></button>
+          <span class="app-brand"><span class="desktop-only">⚔️ </span><span id="room-title">Carcassonne</span></span>
+          <span id="room-code-badge" class="badge badge-code desktop-only">SALA</span>
+        </div>
+
+        <!-- Mobile Mini HUD -->
+        <div id="mobile-mini-hud" class="mobile-mini-hud mobile-only" title="Toca para ver detalles de jugadores">
+          <div id="mobile-hud-player" class="hud-chip">Turno: ...</div>
+          <div id="mobile-hud-deck" class="hud-chip">🎴 0</div>
+        </div>
+
+        <div class="nav-right">
+          <!-- Mobile Buttons -->
+          <button id="mobile-laser-btn" class="btn btn-sm btn-secondary mobile-only" title="Puntero Láser (Tocar y arrastrar para señalar)">🔴</button>
+          <button id="mobile-tiles-guide-btn" class="btn btn-sm btn-secondary mobile-only" title="Guía de Fichas">🗺️</button>
+          <button id="mobile-chat-toggle" class="btn btn-sm btn-secondary mobile-only" title="Chat y Registro">💬</button>
+          <button id="mobile-more-btn" class="btn btn-sm btn-secondary mobile-only" title="Opciones y Menú">⚙️</button>
+
+          <!-- Mobile Actions Dropdown Popup -->
+          <div id="mobile-more-dropdown" class="mobile-more-dropdown" style="display:none;">
+            <button class="dropdown-item open-profile-modal-btn">👤 Mi Perfil</button>
+            <button id="mobile-tiles-guide-dropdown-btn" class="dropdown-item">🗺️ Guía de Fichas</button>
+            <button id="mobile-laser-dropdown-btn" class="dropdown-item">🔴 Puntero Láser</button>
+            <button class="dropdown-item sound-toggle-btn">🔊 Sonido: ON</button>
+            <button id="mobile-shortcuts-btn" class="dropdown-item">⌨️ Atajos de Teclado</button>
+            <button id="mobile-sandbox-btn" class="dropdown-item">🛠️ Modo Sandbox</button>
+            <button id="mobile-save-btn" class="dropdown-item">💾 Guardar Partida</button>
+            <button id="mobile-surrender-btn" class="dropdown-item text-danger">🏳️ Rendirse</button>
+            <div class="dropdown-divider"></div>
+            <button id="mobile-leave-btn" class="dropdown-item text-danger">🚪 Salir de la Sala</button>
+          </div>
+
+          <!-- Desktop Buttons -->
+          <button id="tiles-guide-toggle-btn" class="btn btn-sm btn-outline-gold desktop-only" style="border-color:var(--accent-gold); color:var(--accent-gold); font-weight:700;" title="Consultar Catálogo de Fichas / Losetas (Tecla G)">🗺️ Fichas</button>
+          <button id="laser-pointer-toggle-btn" class="btn btn-sm btn-secondary desktop-only" title="Activar / Desactivar Puntero Láser (Tecla L o Mantén Alt)">🔴 Láser</button>
+          <button id="desktop-chat-toggle" class="btn btn-sm btn-secondary desktop-only" title="Ocultar / Mostrar Chat y Registro">💬 Chat</button>
+          <button class="btn btn-sm btn-secondary open-profile-modal-btn desktop-only" title="Ver mi Perfil y Estadísticas">👤 Perfil</button>
+          <button class="btn btn-sm btn-secondary sound-toggle-btn desktop-only" title="Activar / Desactivar Sonido">🔊 Sonido: ON</button>
+          <button id="shortcuts-toggle-btn" class="btn btn-sm btn-secondary desktop-only" title="Ver atajos de teclado">⌨️ Atajos</button>
+          <button id="sandbox-toggle-btn" class="btn btn-sm btn-secondary desktop-only">🛠️ Sandbox: OFF</button>
+          <button id="surrender-btn" class="btn btn-sm btn-danger desktop-only" title="Rendirse y conceder la partida al rival">🏳️ Rendirse</button>
+          <button id="save-game-btn" class="btn btn-sm btn-secondary desktop-only">💾 Guardar</button>
+          <button id="leave-room-btn" class="btn btn-sm btn-danger desktop-only" title="Salir">🚪</button>
+        </div>
+      </header>
+
+      <!-- Main Play Layout -->
+      <div class="game-layout">
+        <!-- Offcanvas Backdrop for Mobile -->
+        <div id="drawer-backdrop" class="drawer-backdrop"></div>
+
+        <!-- Side Panel: Players, Turn status, Hand tile -->
+        <aside id="side-panel" class="side-panel">
+          <div class="side-panel-header mobile-only">
+            <h3>👥 Jugadores y Partida</h3>
+            <button id="close-side-panel-btn" class="btn-close">✖</button>
+          </div>
+
+          <!-- Turn Banner -->
+          <div id="turn-indicator" class="turn-banner">
+            Cargando estado de la partida...
+          </div>
+
+          <!-- Players Scoreboard -->
+          <div class="players-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 style="font-size:0.85rem; color:var(--text-muted);">JUGADORES</h4>
+              <button id="add-bot-btn" class="btn btn-xs btn-secondary" style="display:none;">🤖 + Bot</button>
+            </div>
+            <div id="players-list"></div>
+          </div>
+
+          <!-- Current Tile In Hand -->
+          <div class="hand-section">
+            <div style="display:flex; justify-content:space-between; width:100%;">
+              <span style="font-size:0.85rem; font-weight:600;">Loseta en Mano</span>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Restantes: <strong id="tiles-remaining" style="color:var(--accent-gold);">0</strong></span>
+            </div>
+
+            <div class="tile-preview-container">
+              <img id="tile-preview-img" src="assets/tiles/tile_back.png" class="tile-preview-img" alt="Loseta actual">
+            </div>
+
+            <div class="hand-actions">
+              <button id="confirm-tile-btn" class="btn btn-success btn-block" style="display:none; font-weight:700; font-size:0.95rem; margin-bottom:6px; background:linear-gradient(135deg, #27ae60, #1e8449); border-color:#2ecc71;">
+                ✓ Colocar Loseta
+              </button>
+              <div style="display:flex; gap:6px; width:100%;">
+                <button id="rotate-tile-btn" class="btn btn-primary btn-block btn-sm">🔄 Rotar (R)</button>
+                <button id="cancel-pending-btn" class="btn btn-secondary btn-sm" style="display:none;">↩️</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Meeple Placement & Turn Confirmation Panel -->
+          <div id="meeple-selection-panel" class="meeple-placement-panel">
+            <h4 id="meeple-panel-title" style="font-size:0.85rem; color:var(--accent-gold);">📍 Colocar Seguidor o Finalizar</h4>
+            <p id="meeple-panel-desc" style="font-size:0.75rem; color:var(--text-muted);">Toca los puntos del tablero o elige aquí:</p>
+            <div id="meeple-options" class="meeple-options-grid"></div>
+            
+            <button id="confirm-final-turn-btn" class="btn btn-success btn-block" style="display:none; margin-top:8px; font-weight:800; font-size:0.95rem; background:linear-gradient(135deg, #27ae60, #1e8449); border-color:#2ecc71; box-shadow:0 0 10px rgba(46,204,113,0.4);">
+              ⚔️ Finalizar Jugada
+            </button>
+
+            <div style="display:flex; gap:6px; margin-top:8px;">
+              <button id="pass-meeple-btn" class="btn btn-secondary btn-sm btn-block">⏩ Pasar (P)</button>
+              <button id="cancel-tile-btn" class="btn btn-danger btn-sm btn-block">↩️ Deshacer (Z)</button>
+            </div>
+          </div>
+
+          <!-- Lobby Start Button -->
+          <button id="start-game-btn" class="btn btn-primary btn-block" style="display:none; margin-top:auto;">
+            ⚔️ Iniciar Partida
+          </button>
+
+          <!-- Sandbox Settings (when active) -->
+          <div id="sandbox-panel" class="sandbox-card">
+            <h4>🛠️ Controles Sandbox</h4>
+            <label class="form-check" style="font-size:0.8rem;">
+              <input type="checkbox" id="sandbox-rules-toggle" checked>
+              <span>Validar reglas oficiales</span>
+            </label>
+          </div>
+        </aside>
+
+        <!-- Board Canvas Viewport -->
+        <main id="board-container" class="board-container">
+          <canvas id="board-canvas"></canvas>
+
+          <!-- Mobile First Floating Active Tile HUD (Top-Right) -->
+          <div id="mobile-floating-tile-hud" class="mobile-floating-tile-hud" title="Toca para rotar la loseta 90°">
+            <div class="floating-tile-header">
+              <span class="floating-tile-label">En Mano</span>
+              <span id="floating-tile-deck-badge" class="floating-tile-deck-badge">🎴 <span id="floating-tiles-count">0</span></span>
+            </div>
+            <div class="floating-tile-canvas-box" id="floating-tile-tap-box">
+              <img id="floating-tile-img" src="assets/tiles/tile_back.png" class="floating-tile-img" alt="Loseta actual">
+              <div class="floating-tile-rot-hint" title="Toca para rotar">🔄</div>
+            </div>
+          </div>
+
+          <!-- Floating Inspection Banner when exploring final map -->
+          <div id="final-map-inspection-banner" class="final-map-banner" style="display:none;">
+            <div class="banner-title">
+              <span>🏰 <strong>Reino Conquistado</strong> • Explorando Mapa Final</span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="reopen-podium-btn" class="btn btn-sm btn-primary">🏆 Ver Resultados / Podio</button>
+              <button id="exit-inspection-btn" class="btn btn-sm btn-secondary">🏠 Menú Principal</button>
+            </div>
+          </div>
+
+          <!-- Floating Map Controls (Zoom & Centering) -->
+          <div class="board-overlay-controls">
+            <button id="board-laser-btn" class="btn-circle" title="Puntero Láser (Tecla L o Mantén Alt)">🔴</button>
+            <button id="board-tiles-guide-btn" class="btn-circle" title="Guía de Fichas (Tecla G)">🗺️</button>
+            <button id="zoom-in-btn" class="btn-circle" title="Acercar (+)">➕</button>
+            <button id="zoom-out-btn" class="btn-circle" title="Alejar (-)">➖</button>
+            <button id="center-board-btn" class="btn-circle" title="Centrar Tablero (F / C)">🎯</button>
+            <button id="mobile-rotate-btn" class="btn-circle btn-rotate-floating mobile-only" title="Rotar loseta">🔄</button>
+          </div>
+
+          <!-- Mobile Contextual Bottom Action Bar -->
+          <div id="mobile-contextual-bar" class="mobile-contextual-bar" style="display:none;">
+            <!-- Pending Tile Actions -->
+            <div id="contextual-pending-actions" class="contextual-action-group" style="display:none;">
+              <button id="touch-rot-left-btn" class="btn-touch btn-touch-secondary" title="Girar Antihorario">
+                <span class="btn-touch-icon">↺</span>
+                <span class="btn-touch-text">Girar</span>
+              </button>
+              <button id="touch-confirm-btn" class="btn-touch btn-touch-primary" title="Confirmar Colocación">
+                <span class="btn-touch-icon">✓</span>
+                <span class="btn-touch-text">Colocar</span>
+              </button>
+              <button id="touch-rot-right-btn" class="btn-touch btn-touch-secondary" title="Girar Horario">
+                <span class="btn-touch-icon">↻</span>
+                <span class="btn-touch-text">Girar</span>
+              </button>
+              <button id="touch-cancel-pending-btn" class="btn-touch btn-touch-danger" title="Cancelar Selección">
+                <span class="btn-touch-icon">✕</span>
+              </button>
+            </div>
+
+            <!-- Meeple Phase Actions -->
+            <div id="contextual-meeple-actions" class="contextual-action-group" style="display:none;">
+              <button id="touch-confirm-turn-btn" class="btn-touch btn-touch-primary" style="display:none; background:linear-gradient(135deg, #27ae60, #1e8449); border-color:#2ecc71;">
+                <span class="btn-touch-icon">⚔️</span>
+                <span class="btn-touch-text">Finalizar</span>
+              </button>
+              <button id="touch-pass-meeple-btn" class="btn-touch btn-touch-primary btn-touch-wide">
+                <span class="btn-touch-icon">⏩</span>
+                <span class="btn-touch-text">Pasar (Sin Meeple)</span>
+              </button>
+              <button id="touch-cancel-tile-btn" class="btn-touch btn-touch-danger">
+                <span class="btn-touch-icon">↩️</span>
+                <span class="btn-touch-text">Deshacer</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Floating Right Actions: Confirm Tile (place_tile phase with pending) -->
+          <div id="board-right-confirm" class="board-right-actions" style="display:none;">
+            <button id="floating-confirm-btn" class="btn-circle btn-confirm-floating" title="Confirmar colocación (Enter / Espacio)">✓</button>
+          </div>
+
+          <!-- Floating Right Actions: Pass & Undo (place_meeple / confirm_turn phase) -->
+          <div id="board-right-actions" class="board-right-actions" style="display:none;">
+            <button id="floating-confirm-turn-btn" class="btn-circle btn-confirm-floating" title="Finalizar Turno (Enter / Espacio)" style="display:none; background:#27ae60; border-color:#2ecc71; box-shadow:0 0 12px rgba(46,204,113,0.7);">⚔️</button>
+            <button id="floating-undo-btn" class="btn-circle btn-undo-floating" title="Deshacer colocación (Z / Retroceso)">↩️</button>
+            <button id="floating-pass-circle-btn" class="btn-circle btn-pass-floating" title="Pasar sin seguidor (P / Espacio)">⏩</button>
+          </div>
+        </main>
+
+        <!-- Right Side: Chat & Activity Logs -->
+        <aside id="chat-drawer" class="chat-drawer">
+          <div class="side-panel-header">
+            <h3>💬 Chat y Registro</h3>
+            <button id="close-chat-drawer-btn" class="btn-close" title="Cerrar panel">✖</button>
+          </div>
+
+          <div class="drawer-tabs">
+            <button class="tab-btn active" data-tab="chat">💬 Chat</button>
+            <button class="tab-btn" data-tab="logs">📜 Registro</button>
+          </div>
+
+          <div id="chat-tab-content" class="chat-content">
+            <div id="chat-messages" class="chat-messages"></div>
+            <div class="chat-input-bar">
+              <input type="text" id="chat-input" class="form-control" placeholder="Mensaje..." maxlength="120">
+              <button id="send-chat-btn" class="btn btn-primary btn-sm">Enviar</button>
+            </div>
+          </div>
+
+          <div id="logs-tab-content" class="chat-content" style="display:none;">
+            <ul id="logs-list" class="logs-list"></ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- ADD BOT MODAL -->
+    <div id="add-bot-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card modal-sm">
+        <div class="modal-header">
+          <h3>🤖 Agregar Bot a la Sala</h3>
+          <button id="close-add-bot-btn" class="btn-close">✖</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nivel de Dificultad</label>
+            <select id="bot-difficulty-select" class="form-control">
+              <option value="easy">🌱 Fácil (Movimientos casuales)</option>
+              <option value="medium" selected>⚔️ Normal (Heurística estratégica)</option>
+              <option value="hard">🧠 Difícil (Bloqueo y control territorial)</option>
+            </select>
+          </div>
+          <button id="confirm-add-bot-btn" class="btn btn-primary btn-block">Agregar Bot</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VICTORY PODIUM MODAL -->
+    <div id="victory-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card victory-card">
+        <div class="modal-header">
+          <h3>🏆 ¡Fin de la Partida - Resultados Oficiales!</h3>
+          <button id="close-victory-btn" class="btn-close">✖</button>
+        </div>
+        <div class="modal-body">
+          <div id="victory-podium" class="victory-podium">
+            <!-- Dynamically populated with rankings -->
+          </div>
+
+          <!-- AI MATCH ANALYZER ("El Sabio de la Torre") -->
+          <div id="ai-analysis-container" class="ai-analysis-container">
+            <button id="request-ai-analysis-btn" class="btn btn-ai-analyzer">
+              <span class="ai-btn-icon">🧙‍♂️</span>
+              <span class="ai-btn-text">Consultar al Sabio de la Torre (Análisis Táctico IA)</span>
+            </button>
+            <div id="ai-analysis-content" class="ai-analysis-content" style="display:none;">
+              <div id="ai-analysis-loading" class="ai-analysis-loading" style="display:none;">
+                <div class="ai-spinner"></div>
+                <p style="color:var(--primary); font-family:var(--font-heading); margin:8px 0 0 0;">El Sabio está examinando las crónicas de la batalla...</p>
+              </div>
+              <div id="ai-analysis-result" class="ai-analysis-result"></div>
+            </div>
+          </div>
+
+          <div class="victory-actions">
+            <button id="inspect-final-board-btn" class="btn btn-warning" style="background:linear-gradient(135deg, #f39c12, #d35400); color:#fff; font-weight:700;">🗺️ Explorar Mapa Final</button>
+            <button id="rematch-btn" class="btn btn-primary">🔄 Jugar Otra Partida</button>
+            <button id="back-to-lobby-btn" class="btn btn-secondary">🏠 Volver al Menú Principal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPLAY & AI CHRONICLE MODAL -->
+    <div id="replay-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <h3 id="replay-modal-title" style="color:var(--primary); font-family:var(--font-heading); margin:0; display:flex; align-items:center; gap:8px;">
+            <span>📜</span> Crónica de la Batalla
+          </h3>
+          <button id="close-replay-modal-btn" class="btn-close" title="Cerrar">✖</button>
+        </div>
+        <div class="modal-body" style="padding:16px 0;">
+          <div id="replay-modal-meta" class="replay-modal-meta"></div>
+          <div id="replay-modal-analysis" class="replay-modal-analysis">
+            <div id="replay-analysis-loading" style="display:none; text-align:center; padding:24px 10px;">
+              <div class="ai-spinner"></div>
+              <p style="color:var(--primary); font-family:var(--font-heading); margin-top:8px;">El Sabio de la Torre está analizando los registros de la batalla...</p>
+            </div>
+            <div id="replay-analysis-text" class="ai-analysis-result"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHORTCUTS HELP MODAL -->
+    <div id="shortcuts-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>⌨️ Atajos de Teclado y Gestos Táctiles</h3>
+          <button id="close-shortcuts-btn" class="btn-close">✖</button>
+        </div>
+        <div class="modal-body">
+          <table class="shortcuts-table">
+            <tr><td><kbd>R</kbd> / <kbd>E</kbd> / <strong>Toque en Loseta</strong></td><td>Girar loseta 90° en sentido horario</td></tr>
+            <tr><td><kbd>Q</kbd> / Botón ↺</td><td>Girar loseta 90° en sentido antihorario</td></tr>
+            <tr><td><kbd>Espacio</kbd> / <kbd>Enter</kbd> / Botón ✓</td><td>Confirmar colocación de loseta</td></tr>
+            <tr><td><kbd>P</kbd> / Botón ⏩</td><td>Pasar colocación de seguidor / meeple</td></tr>
+            <tr><td><kbd>Z</kbd> / <kbd>Backspace</kbd> / Botón ↩️</td><td>Deshacer / Cancelar loseta colocada</td></tr>
+            <tr><td><kbd>F</kbd> / <kbd>C</kbd> / Botón 🎯</td><td>Centrar cámara en el tablero</td></tr>
+            <tr><td><kbd>+</kbd> / <kbd>-</kbd> / <strong>Pinch Zoom</strong></td><td>Acercar / Alejar zoom</td></tr>
+            <tr><td><kbd>G</kbd> / Botón 🗺️</td><td>Abrir / Cerrar Guía de Fichas de Carcassonne</td></tr>
+            <tr><td><strong>Arrastre Táctil (1 Dedo)</strong></td><td>Desplazar la vista del tablero suavemente</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TILES GUIDE MODAL -->
+    <div id="tiles-guide-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card tiles-guide-modal-card">
+        <div class="modal-header">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.6rem;">🗺️</span>
+            <div>
+              <h3 style="margin:0; font-size:1.35rem; color:var(--primary);">Guía de Fichas de Carcassonne</h3>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Catálogo oficial de las 72 losetas del juego base (24 modelos únicos)</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div class="tiles-guide-zoom-controls">
+              <button id="tiles-guide-zoom-out" class="btn btn-xs btn-secondary" title="Alejar Zoom">🔍−</button>
+              <span id="tiles-guide-zoom-level" style="font-size:0.8rem; font-weight:bold; min-width:42px; text-align:center;">100%</span>
+              <button id="tiles-guide-zoom-in" class="btn btn-xs btn-secondary" title="Acercar Zoom">🔍+</button>
+              <button id="tiles-guide-zoom-reset" class="btn btn-xs btn-outline-gold" title="Ajustar / Restablecer">↺ Ajustar</button>
+            </div>
+            <button id="close-tiles-guide-btn" class="btn-close" title="Cerrar (Esc o Tecla G)">✖</button>
+          </div>
+        </div>
+        <div class="modal-body tiles-guide-modal-body">
+          <div id="tiles-guide-img-container" class="tiles-guide-img-container">
+            <img id="tiles-guide-img" src="assets/fichas_carcassonne_guia.jpg" alt="Guía de Fichas Carcassonne" draggable="false">
+          </div>
+          <div class="tiles-guide-footer-info">
+            <div class="tiles-guide-stat-pill">🎴 <strong>72</strong> Fichas Totales</div>
+            <div class="tiles-guide-stat-pill">🏰 <strong>24</strong> Tipos de Terrenos</div>
+            <div class="tiles-guide-stat-pill">🛡️ <strong>Escudos</strong> +2 Pts</div>
+            <div class="tiles-guide-stat-pill">⛪ <strong>Monasterios</strong> 9 Pts al rodear</div>
+            <div class="tiles-guide-stat-pill">🌾 <strong>Granjas</strong> 3 Pts por ciudad completada</div>
+            <div class="tiles-guide-hint-text">
+              <span>💡 Arrastra para mover • Rueda para zoom • Tecla <strong>G</strong> o <strong>Esc</strong> para cerrar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN AUTHENTICATION MODAL (TILE EDITOR PROTECTION) -->
+    <div id="editor-auth-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card" style="max-width:390px;">
+        <div class="modal-header">
+          <h3 style="color:var(--primary); font-family:var(--font-heading); margin:0; display:flex; align-items:center; gap:8px;">
+            <span>🔒</span> Acceso de Administrador
+          </h3>
+          <button id="close-editor-auth-modal" class="btn-close" title="Cerrar">✖</button>
+        </div>
+        <div class="modal-body" style="padding:16px 0 6px 0;">
+          <p style="color:var(--text-muted); font-size:0.88rem; line-height:1.4; margin-bottom:16px;">
+            El <strong>Editor de Puntos y Segmentos</strong> es una herramienta reservada. Ingresa tu usuario y clave para desbloquearlo:
+          </p>
+          <form id="editor-auth-form" onsubmit="return false;">
+            <div class="form-group" style="margin-bottom:14px;">
+              <label style="font-size:0.85rem; color:var(--on-surface); font-weight:600; display:block; margin-bottom:4px;">👤 Usuario Administrador</label>
+              <input type="text" id="editor-auth-user" class="form-control" placeholder="Ej: admin" autocomplete="username" required>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label style="font-size:0.85rem; color:var(--on-surface); font-weight:600; display:block; margin-bottom:4px;">🔑 Clave de Acceso</label>
+              <input type="password" id="editor-auth-pass" class="form-control" placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
+            </div>
+            <div id="editor-auth-error" style="display:none; color:#ef4444; font-size:0.85rem; margin-bottom:12px; font-weight:600; background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); border-radius:4px; padding:6px 10px;">
+              ⚠️ Usuario o clave incorrectos. Acceso denegado.
+            </div>
+            <button type="submit" id="editor-auth-submit-btn" class="btn btn-primary btn-block" style="font-weight:700; padding:10px; font-size:0.95rem;">
+              🔓 Entrar al Editor
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- TILE POINT VISUAL EDITOR MODAL -->
+    <div id="tile-editor-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card tile-editor-card">
+        <div class="modal-header">
+          <h3>🎨 Editor Visual de Puntos de Losetas y Meeples</h3>
+          <button id="close-tile-editor-modal" class="btn-close">✖</button>
+        </div>
+        <div class="modal-body">
+          <div class="editor-top-controls">
+            <div class="editor-select-wrapper">
+              <label>Seleccionar Loseta:</label>
+              <select id="editor-tile-select" class="form-control"></select>
+            </div>
+            <div class="editor-nav-buttons">
+              <button id="editor-prev-tile-btn" class="btn btn-secondary btn-sm">⬅️ Anterior</button>
+              <button id="editor-next-tile-btn" class="btn btn-secondary btn-sm">Siguiente ➡️</button>
+              <button id="editor-rotate-tile-btn" class="btn btn-primary btn-sm">🔄 Rotar (90°)</button>
+            </div>
+          </div>
+
+          <div class="editor-workspace">
+            <div class="editor-canvas-wrapper">
+              <canvas id="tile-editor-canvas" width="400" height="400"></canvas>
+              <div class="editor-canvas-hint">💡 Arrastra con el ratón o el dedo cualquier círculo de color para colocarlo exactamente sobre su camino, campo o ciudad.</div>
+            </div>
+
+            <div class="editor-sidebar">
+              <h4>📍 Puntos de Colocación (Segmentos)</h4>
+              <div id="editor-segments-list" class="editor-segments-list"></div>
+
+              <div class="editor-add-buttons-container">
+                <span style="font-size:0.8rem; font-weight:600; color:var(--primary);">➕ Agregar Nuevo Punto:</span>
+                <div class="editor-add-grid">
+                  <button id="editor-add-city-btn" class="btn btn-xs btn-outline-city">🛡️ Ciudad</button>
+                  <button id="editor-add-road-btn" class="btn btn-xs btn-outline-road">🎯 Camino</button>
+                  <button id="editor-add-field-btn" class="btn btn-xs btn-outline-field">🌾 Campo</button>
+                  <button id="editor-add-monastery-btn" class="btn btn-xs btn-outline-monastery">⛪ Monasterio</button>
+                </div>
+              </div>
+
+              <div class="editor-actions">
+                <button id="editor-save-btn" class="btn btn-primary btn-block">💾 Guardar Cambios</button>
+                <button id="editor-close-btn" class="btn btn-secondary btn-block">✖ Salir del Editor</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- STARTING PLAYER ROULETTE MODAL -->
+    <div id="starter-roulette-modal" class="modal-overlay roulette-overlay" style="display:none;">
+      <div class="modal-card roulette-modal-card">
+        <div class="roulette-header">
+          <span class="roulette-crown">👑</span>
+          <h2 class="roulette-title">LA RULETA DEL DESTINO</h2>
+          <p class="roulette-subtitle">El destino medieval sortea quién iniciará la batalla...</p>
+        </div>
+
+        <div class="roulette-stage">
+          <!-- Pointer Needle -->
+          <div class="roulette-pointer-needle">▼</div>
+
+          <!-- Circular Canvas Wheel -->
+          <div class="roulette-wheel-container">
+            <canvas id="roulette-wheel-canvas" width="340" height="340"></canvas>
+            <div class="roulette-center-hub">
+              <span class="roulette-hub-icon">⚔️</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="roulette-winner-box" class="roulette-winner-box" style="display:none;">
+          <div class="winner-trophy-badge">🏆 PRIMER COMANDANTE</div>
+          <div id="roulette-winner-name" class="winner-name-text">Comandante</div>
+          <p id="roulette-winner-desc" class="winner-desc-text">Iniciará la conquista del reino colocando la primera loseta.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE & STATS MODAL -->
+    <div id="profile-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card profile-modal-card">
+        <div class="modal-header">
+          <h2>👤 Perfil de Comandante Medieval</h2>
+          <button id="close-profile-modal-btn" class="modal-close-btn">&times;</button>
+        </div>
+
+        <div class="profile-modal-body">
+          <!-- Top Row: Active Avatar & Name Edit -->
+          <div class="profile-active-header">
+            <div class="profile-avatar-active-display">
+              <span id="modal-profile-avatar-icon" class="avatar-icon-giant">👑</span>
+            </div>
+            <div class="profile-inputs-col">
+              <div class="form-group">
+                <label>Nombre / Apodo del Jugador</label>
+                <input type="text" id="modal-profile-name-input" class="form-control" maxlength="16" placeholder="Tu nombre">
+              </div>
+              <div style="display:flex; gap:10px;">
+                <div class="form-group" style="flex:1;">
+                  <label>Color de Meeple</label>
+                  <select id="modal-profile-color-select" class="form-control">
+                    <option value="red">🔴 Rojo</option>
+                    <option value="blue">🔵 Azul</option>
+                    <option value="green">🟢 Verde</option>
+                    <option value="yellow">🟡 Amarillo</option>
+                    <option value="black">⚫ Negro</option>
+                    <option value="pink">🌸 Rosa</option>
+                  </select>
+                </div>
+                <div class="form-group" style="flex:1;">
+                  <label>Título Honorífico</label>
+                  <div id="modal-profile-title-text" class="profile-honorific-badge">Monarca de Carcassonne</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medieval Avatar Picker -->
+          <div class="avatar-picker-section">
+            <h4>🎭 Elige tu Avatar Medieval</h4>
+            <div id="avatar-selection-grid" class="avatar-selection-grid"></div>
+          </div>
+
+          <!-- Career Statistics Dashboard -->
+          <div class="stats-dashboard-section">
+            <h4>📊 Estadísticas de Carrera</h4>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-num" id="stat-games-played">0</span>
+                <span class="stat-label">Partidas Jugadas</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num text-gold" id="stat-wins-count">0</span>
+                <span class="stat-label">Victorias</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num text-success" id="stat-win-rate">0%</span>
+                <span class="stat-label">Tasa de Victoria</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num text-accent" id="stat-max-score">0</span>
+                <span class="stat-label">Puntos Máximos</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num" id="stat-cities-count">0</span>
+                <span class="stat-label">Ciudades Completadas</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num" id="stat-roads-count">0</span>
+                <span class="stat-label">Caminos Cerrados</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Status & Cloud Sync Bar -->
+          <div class="profile-account-bar">
+            <div class="account-bar-info">
+              <span id="profile-modal-auth-icon">👤</span>
+              <div>
+                <strong id="profile-modal-auth-title">Modo Invitado</strong>
+                <p id="profile-modal-auth-desc">Tus datos solo se guardan en este navegador. Inicia sesión o regístrate para sincronizar con la nube.</p>
+              </div>
+            </div>
+            <div class="account-bar-actions">
+              <button id="profile-modal-admin-btn" class="btn btn-sm btn-accent" style="display:none;">👑 Panel Admin</button>
+              <button id="profile-modal-login-btn" class="btn btn-sm btn-primary">🔑 Iniciar Sesión / Registro</button>
+              <button id="profile-modal-logout-btn" class="btn btn-sm btn-secondary" style="display:none;">🚪 Cerrar Sesión</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTHENTICATION (LOGIN / REGISTER) MODAL -->
+    <div id="auth-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card auth-modal-card">
+        <div class="modal-header auth-modal-header">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.6rem;">🏰</span>
+            <div>
+              <h3 style="margin:0; font-size:1.25rem; color:var(--primary);">Acceso al Reino de Carcassonne</h3>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Sincroniza tus victorias, partidas y rango militar</span>
+            </div>
+          </div>
+          <button id="close-auth-modal-btn" class="modal-close-icon-btn" title="Cerrar ventana">&times;</button>
+        </div>
+
+        <div class="auth-tabs-row">
+          <button id="auth-tab-login-btn" class="auth-tab-btn active" data-auth-tab="login">🔑 Iniciar Sesión</button>
+          <button id="auth-tab-reg-btn" class="auth-tab-btn" data-auth-tab="register">✨ Registrar Comandante</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="auth-login-form" class="auth-form-pane active">
+          <div id="auth-login-msg" class="auth-alert-msg" style="display:none;"></div>
+          <div class="form-group">
+            <label>Nombre de Usuario</label>
+            <input type="text" id="auth-login-username" class="form-control" placeholder="Ej: sir_daniel" autocomplete="username" required>
+          </div>
+          <div class="form-group">
+            <label>Contraseña Secreta</label>
+            <input type="password" id="auth-login-password" class="form-control" placeholder="••••••••" autocomplete="current-password" required>
+          </div>
+          <button type="submit" id="auth-login-submit-btn" class="btn btn-primary btn-block btn-auth-submit">
+            ⚔️ Entrar a la Gran Mesa
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="auth-register-form" class="auth-form-pane" style="display:none;">
+          <div id="auth-reg-msg" class="auth-alert-msg" style="display:none;"></div>
+          <div class="form-group">
+            <label>Nombre de Usuario Único (letras, números, guión bajo)</label>
+            <input type="text" id="auth-reg-username" class="form-control" placeholder="Ej: lord_rodrigo" maxlength="20" autocomplete="username" required>
+          </div>
+          <div class="form-group">
+            <label>Nombre Visible / Título de Batalla</label>
+            <input type="text" id="auth-reg-displayname" class="form-control" placeholder="Ej: Lord Rodrigo" maxlength="20" required>
+          </div>
+          <div class="form-row-2col" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group">
+              <label>Contraseña</label>
+              <input type="password" id="auth-reg-password" class="form-control" placeholder="Mínimo 4 caracteres" minlength="4" autocomplete="new-password" required>
+            </div>
+            <div class="form-group">
+              <label>Confirmar Contraseña</label>
+              <input type="password" id="auth-reg-confirm" class="form-control" placeholder="Repite contraseña" minlength="4" autocomplete="new-password" required>
+            </div>
+          </div>
+          <button type="submit" id="auth-reg-submit-btn" class="btn btn-primary btn-block btn-auth-submit">
+            🛡️ Registrar y Reclamar Blasón
+          </button>
+        </form>
+
+        <div class="auth-modal-footer">
+          <button type="button" id="auth-continue-guest-btn" class="btn-guest-action">
+            <span class="guest-btn-icon">👤</span> <span>Continuar en Modo Invitado (Sin Cuenta)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN PANEL MODAL -->
+    <div id="admin-panel-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card admin-modal-card">
+        <div class="modal-header admin-modal-header">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.6rem;">👑</span>
+            <div>
+              <h3 style="margin:0; font-size:1.25rem; color:var(--accent-gold);">Cámara del Rey: Administración de Comandantes</h3>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Gestión de cuentas, reseteo de claves y enlaces de recuperación</span>
+            </div>
+          </div>
+          <button id="close-admin-panel-btn" class="modal-close-icon-btn" title="Cerrar ventana">&times;</button>
+        </div>
+
+        <div class="admin-panel-body">
+          <!-- Top Stats & Search Row -->
+          <div class="admin-toolbar-row">
+            <div class="admin-search-wrapper">
+              <input type="text" id="admin-search-users-input" class="form-control" placeholder="🔍 Buscar por nombre o usuario...">
+            </div>
+            <div class="admin-tools-actions">
+              <button id="admin-refresh-users-btn" class="btn btn-sm btn-secondary">🔄 Actualizar Lista</button>
+              <button id="admin-claim-key-btn" class="btn btn-xs btn-outline-gold" title="Reclamar Rango con Clave Maestra">🔑 Clave Maestra</button>
+            </div>
+          </div>
+
+          <div id="admin-users-list-container" class="admin-users-list-container">
+            <div class="empty-hint">Cargando comandantes del reino...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN CHANGE PASSWORD MODAL -->
+    <div id="admin-change-pass-modal" class="modal-overlay" style="display:none; z-index:1100;">
+      <div class="modal-card admin-submodal-card">
+        <div class="modal-header">
+          <h4 style="margin:0; color:var(--accent-gold);">🔑 Cambiar Contraseña de Comandante</h4>
+          <button id="close-admin-change-pass-btn" class="modal-close-icon-btn">&times;</button>
+        </div>
+        <form id="admin-change-pass-form" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+          <input type="hidden" id="admin-change-pass-userid">
+          <div id="admin-change-pass-msg" class="auth-alert-msg" style="display:none;"></div>
+          <p style="margin:0; font-size:0.9rem; color:var(--on-surface);">Cambiando contraseña para: <strong id="admin-change-pass-username" style="color:var(--primary);"></strong></p>
+          <div class="form-group">
+            <label>Nueva Contraseña (mínimo 4 caracteres)</label>
+            <input type="password" id="admin-change-pass-newpass" class="form-control" placeholder="Nueva contraseña" minlength="4" required>
+          </div>
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+            <button type="button" id="admin-change-pass-cancel-btn" class="btn btn-sm btn-secondary">Cancelar</button>
+            <button type="submit" class="btn btn-sm btn-primary">Guardar Nueva Contraseña</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ADMIN RESET LINK GENERATED MODAL -->
+    <div id="admin-reset-link-modal" class="modal-overlay" style="display:none; z-index:1100;">
+      <div class="modal-card admin-submodal-card">
+        <div class="modal-header">
+          <h4 style="margin:0; color:var(--accent-gold);">🔗 Enlace Temporal de Recuperación</h4>
+          <button id="close-admin-reset-link-btn" class="modal-close-icon-btn">&times;</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+          <p style="margin:0; font-size:0.88rem; color:var(--on-surface);">
+            Envía este enlace seguro al comandante <strong id="admin-reset-link-user" style="color:var(--primary);"></strong> para que restablezca su contraseña (válido por 24 horas):
+          </p>
+          <div class="reset-link-box" style="display:flex; gap:6px;">
+            <input type="text" id="admin-reset-link-input" class="form-control" readonly style="font-size:0.82rem; font-family:monospace; background:rgba(0,0,0,0.5);">
+            <button id="admin-copy-reset-link-btn" class="btn btn-sm btn-primary" title="Copiar al portapapeles">📋 Copiar</button>
+          </div>
+          <div id="admin-copy-feedback" style="display:none; font-size:0.8rem; color:var(--accent-gold); text-align:center;">¡Enlace copiado al portapapeles! Listo para enviar por Telegram o WhatsApp.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USER RESET PASSWORD FROM LINK MODAL -->
+    <div id="reset-password-modal" class="modal-overlay" style="display:none; z-index:1200;">
+      <div class="modal-card auth-modal-card">
+        <div class="modal-header auth-modal-header">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.6rem;">🛡️</span>
+            <div>
+              <h3 style="margin:0; font-size:1.25rem; color:var(--primary);">Restablecer Contraseña</h3>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Recuperación segura de cuenta de comandante</span>
+            </div>
+          </div>
+          <button id="close-reset-pass-modal-btn" class="modal-close-icon-btn">&times;</button>
+        </div>
+        <form id="user-reset-pass-form" class="auth-form-pane" style="margin-top:10px;">
+          <div id="user-reset-pass-msg" class="auth-alert-msg" style="display:none;"></div>
+          <p style="margin:0; font-size:0.9rem; color:var(--on-surface);">Restableciendo clave para: <strong id="user-reset-pass-username" style="color:var(--primary);"></strong></p>
+          <div class="form-group">
+            <label>Nueva Contraseña Secreta</label>
+            <input type="password" id="user-reset-new-password" class="form-control" placeholder="Mínimo 4 caracteres" minlength="4" autocomplete="new-password" required>
+          </div>
+          <div class="form-group">
+            <label>Confirmar Nueva Contraseña</label>
+            <input type="password" id="user-reset-confirm-password" class="form-control" placeholder="Repite la contraseña" minlength="4" autocomplete="new-password" required>
+          </div>
+          <button type="submit" id="user-reset-pass-submit-btn" class="btn btn-primary btn-block btn-auth-submit">
+            ⚔️ Guardar Nueva Contraseña y Entrar
+          </button>
+        </form>
+      </div>
+    </div>
+    <div id="replay-movie-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card replay-movie-card">
+        <div class="modal-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.4rem;">🎬</span>
+            <div>
+              <h3 id="replay-movie-title" style="margin:0; font-size:1.15rem;">Película de la Crónica</h3>
+              <span id="replay-movie-subtitle" style="font-size:0.8rem; color:var(--text-muted);">Cargando partida...</span>
+            </div>
+          </div>
+          <button id="close-replay-movie-btn" class="btn-close">✖</button>
+        </div>
+        <div class="modal-body replay-movie-body">
+          <div class="replay-canvas-wrapper">
+            <canvas id="replay-board-canvas"></canvas>
+            <div id="replay-turn-badge" class="replay-turn-badge">Turno 0 / 0</div>
+          </div>
+
+          <!-- Replay Controls & Timeline Scrubber -->
+          <div class="replay-controls-bar">
+            <div class="replay-timeline-row">
+              <span id="replay-current-turn-label" class="timeline-label">Turno 0</span>
+              <input type="range" id="replay-timeline-slider" min="0" max="100" value="0" class="timeline-slider">
+              <span id="replay-total-turns-label" class="timeline-label">Turno 0</span>
+            </div>
+
+            <div class="replay-buttons-row">
+              <div class="replay-playback-btns">
+                <button id="replay-step-start-btn" class="btn btn-sm btn-secondary" title="Ir al inicio (Turno 0)">⏮️</button>
+                <button id="replay-step-back-btn" class="btn btn-sm btn-secondary" title="Turno anterior">⏪</button>
+                <button id="replay-play-pause-btn" class="btn btn-primary btn-play-main" title="Reproducir / Pausar">▶️ Reproducir</button>
+                <button id="replay-step-fwd-btn" class="btn btn-sm btn-secondary" title="Siguiente turno">⏩</button>
+                <button id="replay-step-end-btn" class="btn btn-sm btn-secondary" title="Ir al final">⏭️</button>
+              </div>
+
+              <div class="replay-speed-controls">
+                <button id="replay-speed-btn" class="btn btn-xs btn-secondary" title="Velocidad de reproducción">⚡ 1x</button>
+              </div>
+            </div>
+
+            <div id="replay-action-desc" class="replay-action-desc">
+              Cargando movimientos de la crónica...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REMATCH REQUEST POPUP DIALOG -->
+    <div id="rematch-request-modal" class="modal-overlay" style="display:none; z-index:100000;">
+      <div class="modal-card" style="max-width:440px; text-align:center; padding:24px; border:3px solid var(--accent-gold); box-shadow:0 12px 35px rgba(0,0,0,0.9), 0 0 25px rgba(241,196,15,0.25);">
+        <div style="font-size:2.8rem; margin-bottom:8px;">⚔️</div>
+        <h3 id="rematch-request-title" style="color:var(--accent-gold); margin:0 0 8px 0; font-size:1.35rem; font-family:var(--font-heading);">¡Duelo de Revancha!</h3>
+        <p id="rematch-request-desc" style="color:var(--text-main); font-size:0.95rem; margin-bottom:20px; line-height:1.4;">
+          El comandante <strong id="rematch-requester-name">...</strong> desea jugar otra partida. ¿Aceptas el desafío?
+        </p>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <button id="accept-rematch-btn" class="btn btn-primary btn-lg" style="font-weight:800; padding:10px 20px;">
+            ⚔️ ¡Aceptar Revancha!
+          </button>
+          <button id="decline-rematch-btn" class="btn btn-secondary btn-lg" style="padding:10px 16px;">
+            ✖️ Declinar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIEVAL CUSTOM DIALOG MODAL (Replaces native alert / confirm / prompt without browser IP) -->
+    <div id="medieval-dialog-modal" class="modal-overlay" style="display:none; z-index:999999;">
+      <div class="modal-card" style="max-width:440px; text-align:center; padding:24px; border:2px solid var(--accent-gold); box-shadow:0 14px 40px rgba(0,0,0,0.95), 0 0 20px rgba(241,196,15,0.2);">
+        <div id="medieval-dialog-icon" style="font-size:2.8rem; margin-bottom:8px;">🏰</div>
+        <h3 id="medieval-dialog-title" style="color:var(--accent-gold); margin:0 0 10px 0; font-size:1.25rem; font-family:var(--font-heading);">Confirmación del Reino</h3>
+        <p id="medieval-dialog-message" style="color:var(--text-main); font-size:0.95rem; margin-bottom:18px; line-height:1.45; word-break:break-word;">
+          ¿Deseas continuar?
+        </p>
+        <div id="medieval-dialog-prompt-wrap" style="display:none; margin-bottom:18px;">
+          <input type="text" id="medieval-dialog-input" class="form-control" style="width:100%; text-align:center; font-size:1rem; padding:10px; background:rgba(0,0,0,0.4); border-color:var(--accent-gold);" />
+        </div>
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+          <button id="medieval-dialog-confirm-btn" class="btn btn-primary" style="font-weight:700; padding:9px 20px; min-width:110px;">
+            ✓ Confirmar
+          </button>
+          <button id="medieval-dialog-cancel-btn" class="btn btn-secondary" style="padding:9px 18px; min-width:100px;">
+            ✖ Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  <!-- Socket.io and Application Scripts -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/audio.js?v=9.2"></script>
+  <script src="js/profile.js?v=9.2"></script>
+  <script src="js/board.js?v=9.2"></script>
+  <script src="js/tile-editor.js?v=9.2"></script>
+  <script src="js/game.js?v=9.2"></script>
+</body>
+</html>

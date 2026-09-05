@@ -1,0 +1,22 @@
+name: carcassonne-server
+
+services:
+  carcassonne:
+    build: .
+    image: carcassonne-web:latest
+    container_name: carcassonne-server
+    restart: unless-stopped
+    ports:
+      - "3080:3080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PORT=3080
+      - NODE_ENV=production
+    labels:
+      # CasaOS integration labels
+      casaos.app.name: "Carcassonne"
+      casaos.app.title: "Carcassonne Online"
+      casaos.app.icon: "https://i.imgur.com/KnrGDr1.jpg"
+      casaos.app.port: "3080"
+      casaos.app.index: "/"
