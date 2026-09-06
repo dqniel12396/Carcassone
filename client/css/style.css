@@ -1447,7 +1447,14 @@ h1, h2, h3, h4 {
   touch-action: none;
 }
 
-/* ==================== MOBILE FLOATING ACTIVE TILE HUD ==================== */
+/* ==================== MOBILE FLOATING ACTIVE TILE HUD (MOBILE ONLY) ==================== */
+@media (min-width: 1025px) {
+  .mobile-floating-tile-hud,
+  #mobile-floating-tile-hud {
+    display: none !important;
+  }
+}
+
 .mobile-floating-tile-hud {
   position: absolute;
   top: calc(10px + env(safe-area-inset-top, 0px));
