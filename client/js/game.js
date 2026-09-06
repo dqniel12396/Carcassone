@@ -2663,37 +2663,132 @@ function updateUI(room) {
   // Render Players & Scores
   renderPlayers(room);
 
-  // Render Current Tile in hand & Mobile Floating HUD
+  // Render Current Tile in hand & Upcoming Tile Preview (Official Rule inspection)
+  const handSectionTitle = document.getElementById('hand-section-title');
+  const tileWaitingBadge = document.getElementById('tile-preview-waiting-badge');
+  const upcomingTileCard = document.getElementById('upcoming-tile-card');
+  const upcomingTileTitle = document.getElementById('upcoming-tile-title');
+  const upcomingTileImg = document.getElementById('upcoming-tile-img');
+  const upcomingTileDesc = document.getElementById('upcoming-tile-desc');
+
   const floatingTileHud = document.getElementById('mobile-floating-tile-hud');
+  const floatingTileLabel = document.getElementById('floating-tile-label');
   const floatingTileImg = document.getElementById('floating-tile-img');
   const floatingTilesCount = document.getElementById('floating-tiles-count');
+  const floatingNextChip = document.getElementById('floating-next-tile-chip');
+  const floatingNextImg = document.getElementById('floating-next-tile-img');
 
-  if (tilePreviewImg) {
-    if (room.currentTile && room.status === 'playing') {
-      tilePreviewImg.src = room.currentTile.image;
-      tilePreviewImg.style.transform = `rotate(${room.currentRotation}deg)`;
-      if (rotateBtn) rotateBtn.disabled = room.turnPhase !== 'place_tile' && !room.sandboxMode && !isMyTurn;
+  if (room.status === 'playing') {
+    const activeName = activePlayer ? activePlayer.name : 'Jugador';
+
+    if (isMyTurn) {
+      if (handSectionTitle) handSectionTitle.innerHTML = '⚔️ Tu Loseta en Mano';
+      if (tileWaitingBadge) tileWaitingBadge.style.display = 'none';
+      if (tilePreviewImg && room.currentTile) {
+        tilePreviewImg.src = room.currentTile.image;
+        tilePreviewImg.style.transform = `rotate(${room.currentRotation || 0}deg)`;
+      }
+      if (rotateBtn) rotateBtn.disabled = (room.turnPhase !== 'place_tile' && !room.sandboxMode);
+
+      // Upcoming Tile Preview Card
+      if (upcomingTileCard) {
+        if (room.nextTile) {
+          upcomingTileCard.style.display = 'flex';
+          if (upcomingTileTitle) upcomingTileTitle.innerText = '🔮 Próxima en el Mazo';
+          if (upcomingTileImg) upcomingTileImg.src = room.nextTile.image;
+          if (upcomingTileDesc) upcomingTileDesc.innerText = 'Esta loseta tocará a continuación';
+        } else {
+          upcomingTileCard.style.display = 'none';
+        }
+      }
+
+      // Floating Mobile HUD
+      if (floatingTileHud) {
+        floatingTileHud.style.display = 'flex';
+        floatingTileHud.classList.add('my-turn');
+        if (floatingTileLabel) floatingTileLabel.innerText = 'En Mano';
+        if (floatingTileImg && room.currentTile) {
+          floatingTileImg.src = room.currentTile.image;
+          const currentRot = (boardRenderer && boardRenderer.pendingPos) ? boardRenderer.pendingRotation : room.currentRotation;
+          floatingTileImg.style.transform = `rotate(${currentRot || 0}deg)`;
+        }
+        if (floatingTilesCount) floatingTilesCount.innerText = room.remainingTiles !== undefined ? room.remainingTiles : 0;
+        if (floatingNextChip) {
+          if (room.nextTile) {
+            floatingNextChip.style.display = 'flex';
+            if (floatingNextImg) floatingNextImg.src = room.nextTile.image;
+          } else {
+            floatingNextChip.style.display = 'none';
+          }
+        }
+      }
     } else {
-      tilePreviewImg.src = 'assets/tiles/tile_back.png';
+      // Not my turn: show upcoming tile to plan ahead, plus active tile in sub-card
+      if (handSectionTitle) {
+        handSectionTitle.innerHTML = room.nextTile ? '🔮 Tu Próxima Loseta' : `Loseta en juego (${escapeHtml(activeName)})`;
+      }
+      if (tileWaitingBadge) {
+        tileWaitingBadge.style.display = 'block';
+        tileWaitingBadge.innerText = `⏳ Turno de ${activeName}`;
+      }
+      if (tilePreviewImg) {
+        if (room.nextTile) {
+          tilePreviewImg.src = room.nextTile.image;
+          tilePreviewImg.style.transform = 'none';
+        } else if (room.currentTile) {
+          tilePreviewImg.src = room.currentTile.image;
+          tilePreviewImg.style.transform = `rotate(${room.currentRotation || 0}deg)`;
+        } else {
+          tilePreviewImg.src = 'assets/tiles/tile_back.png';
+          tilePreviewImg.style.transform = 'none';
+        }
+      }
       if (rotateBtn) rotateBtn.disabled = true;
-    }
-  }
 
-  if (floatingTileHud) {
-    if (room.currentTile && room.status === 'playing') {
-      floatingTileHud.style.display = 'flex';
-      floatingTileHud.classList.toggle('my-turn', isMyTurn && room.turnPhase === 'place_tile');
-      if (floatingTileImg) {
-        floatingTileImg.src = room.currentTile.image;
-        const currentRot = (boardRenderer && boardRenderer.pendingPos) ? boardRenderer.pendingRotation : room.currentRotation;
-        floatingTileImg.style.transform = `rotate(${currentRot || 0}deg)`;
+      // Show current opponent tile in the secondary card
+      if (upcomingTileCard) {
+        if (room.currentTile && room.nextTile) {
+          upcomingTileCard.style.display = 'flex';
+          if (upcomingTileTitle) upcomingTileTitle.innerHTML = `👤 En juego por ${escapeHtml(activeName)}`;
+          if (upcomingTileImg) upcomingTileImg.src = room.currentTile.image;
+          const phaseDesc = room.turnPhase === 'place_tile' ? 'eligiendo casilla' : (room.turnPhase === 'confirm_turn' ? 'confirmando jugada' : 'colocando seguidor');
+          if (upcomingTileDesc) upcomingTileDesc.innerText = `En tablero (${phaseDesc})...`;
+        } else {
+          upcomingTileCard.style.display = 'none';
+        }
       }
-      if (floatingTilesCount) {
-        floatingTilesCount.innerText = room.remainingTiles !== undefined ? room.remainingTiles : 0;
+
+      // Floating Mobile HUD
+      if (floatingTileHud) {
+        floatingTileHud.style.display = 'flex';
+        floatingTileHud.classList.remove('my-turn');
+        if (floatingTileLabel) floatingTileLabel.innerText = room.nextTile ? 'Próxima' : 'En juego';
+        if (floatingTileImg) {
+          floatingTileImg.src = room.nextTile ? room.nextTile.image : (room.currentTile ? room.currentTile.image : 'assets/tiles/tile_back.png');
+          floatingTileImg.style.transform = 'none';
+        }
+        if (floatingTilesCount) floatingTilesCount.innerText = room.remainingTiles !== undefined ? room.remainingTiles : 0;
+        if (floatingNextChip) {
+          if (room.currentTile && room.nextTile) {
+            floatingNextChip.style.display = 'flex';
+            if (floatingNextImg) floatingNextImg.src = room.currentTile.image;
+          } else {
+            floatingNextChip.style.display = 'none';
+          }
+        }
       }
-    } else {
-      floatingTileHud.style.display = 'none';
     }
+  } else {
+    // Not playing
+    if (handSectionTitle) handSectionTitle.innerText = 'Loseta en Mano';
+    if (tileWaitingBadge) tileWaitingBadge.style.display = 'none';
+    if (tilePreviewImg) {
+      tilePreviewImg.src = 'assets/tiles/tile_back.png';
+      tilePreviewImg.style.transform = 'none';
+    }
+    if (rotateBtn) rotateBtn.disabled = true;
+    if (upcomingTileCard) upcomingTileCard.style.display = 'none';
+    if (floatingTileHud) floatingTileHud.style.display = 'none';
   }
 
   // In local mode, default to logs and hide chat

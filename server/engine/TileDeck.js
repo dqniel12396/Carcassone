@@ -98,6 +98,16 @@ class TileDeck {
     return null;
   }
 
+  peekTile() {
+    if (this.riverDeck.length > 0) {
+      return this.riverDeck[0];
+    }
+    if (this.deck.length > 0) {
+      return this.deck[0];
+    }
+    return null;
+  }
+
   remainingCount() {
     return this.riverDeck.length + this.deck.length;
   }

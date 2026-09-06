@@ -4201,4 +4201,110 @@ kbd {
   border: 1px solid rgba(231, 76, 60, 0.4);
 }
 
+/* ==========================================================================
+   UPCOMING / NEXT TILE PREVIEW (OFFICIAL DIGITAL CARCASSONNE)
+   ========================================================================== */
+.tile-preview-container {
+  position: relative;
+}
+
+.tile-preview-waiting-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(18, 14, 11, 0.92);
+  border: 1px solid var(--accent-gold, #f1c40f);
+  color: var(--accent-gold, #f1c40f);
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.upcoming-tile-card {
+  margin-top: 10px;
+  background: rgba(26, 20, 16, 0.85);
+  border: 1.5px dashed rgba(233, 193, 118, 0.4);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.upcoming-tile-card:hover {
+  border-color: var(--accent-gold, #f1c40f);
+  background: rgba(36, 28, 22, 0.95);
+}
+
+.upcoming-tile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-gold, #f1c40f);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.upcoming-tile-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upcoming-tile-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid var(--border-iron, #44372c);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+  object-fit: cover;
+  background: #111;
+  flex-shrink: 0;
+}
+
+.upcoming-tile-desc {
+  font-size: 0.74rem;
+  color: var(--text-muted, #a0978d);
+  line-height: 1.3;
+}
+
+/* Floating HUD Next Tile Mini Chip */
+.floating-next-tile-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(233, 193, 118, 0.5);
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.floating-next-chip-text {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-gold, #f1c40f);
+}
+
+.floating-next-chip-img {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+}
+
+
 

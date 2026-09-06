@@ -1314,6 +1314,8 @@ class RoomManager {
       ? [...room.players].sort((a, b) => b.score - a.score)
       : [];
 
+    const nextTile = (room.deck && room.status === 'playing') ? room.deck.peekTile() : null;
+
     return {
       id: room.id,
       name: room.name,
@@ -1329,6 +1331,7 @@ class RoomManager {
       playerSounds,
       rankings,
       currentTile: room.currentTile,
+      nextTile,
       currentRotation: room.currentRotation,
       validPlacements,
       availableSegments,

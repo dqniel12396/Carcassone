@@ -545,15 +545,16 @@
             <div id="players-list"></div>
           </div>
 
-          <!-- Current Tile In Hand -->
+          <!-- Current Tile In Hand & Upcoming Tile Card -->
           <div class="hand-section">
-            <div style="display:flex; justify-content:space-between; width:100%;">
-              <span style="font-size:0.85rem; font-weight:600;">Loseta en Mano</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span id="hand-section-title" style="font-size:0.85rem; font-weight:700;">Loseta en Mano</span>
               <span style="font-size:0.8rem; color:var(--text-muted);">Restantes: <strong id="tiles-remaining" style="color:var(--accent-gold);">0</strong></span>
             </div>
 
             <div class="tile-preview-container">
               <img id="tile-preview-img" src="assets/tiles/tile_back.png" class="tile-preview-img" alt="Loseta actual">
+              <div id="tile-preview-waiting-badge" class="tile-preview-waiting-badge" style="display:none;">⏳ Turno del Rival</div>
             </div>
 
             <div class="hand-actions">
@@ -563,6 +564,17 @@
               <div style="display:flex; gap:6px; width:100%;">
                 <button id="rotate-tile-btn" class="btn btn-primary btn-block btn-sm">🔄 Rotar (R)</button>
                 <button id="cancel-pending-btn" class="btn btn-secondary btn-sm" style="display:none;">↩️</button>
+              </div>
+            </div>
+
+            <!-- Upcoming / Next Tile In Deck Card (Official Rule Preview) -->
+            <div id="upcoming-tile-card" class="upcoming-tile-card" style="display:none;" title="Loseta visible que tocará a continuación en el mazo">
+              <div class="upcoming-tile-header">
+                <span id="upcoming-tile-title">🔮 Próxima en el Mazo</span>
+              </div>
+              <div class="upcoming-tile-body">
+                <img id="upcoming-tile-img" src="assets/tiles/tile_back.png" class="upcoming-tile-img" alt="Próxima loseta">
+                <span id="upcoming-tile-desc" class="upcoming-tile-desc">Se jugará en el siguiente turno</span>
               </div>
             </div>
           </div>
@@ -605,12 +617,16 @@
           <!-- Mobile First Floating Active Tile HUD (Top-Right) -->
           <div id="mobile-floating-tile-hud" class="mobile-floating-tile-hud" title="Toca para rotar la loseta 90°">
             <div class="floating-tile-header">
-              <span class="floating-tile-label">En Mano</span>
+              <span id="floating-tile-label" class="floating-tile-label">En Mano</span>
               <span id="floating-tile-deck-badge" class="floating-tile-deck-badge">🎴 <span id="floating-tiles-count">0</span></span>
             </div>
             <div class="floating-tile-canvas-box" id="floating-tile-tap-box">
               <img id="floating-tile-img" src="assets/tiles/tile_back.png" class="floating-tile-img" alt="Loseta actual">
               <div class="floating-tile-rot-hint" title="Toca para rotar">🔄</div>
+            </div>
+            <div id="floating-next-tile-chip" class="floating-next-tile-chip" style="display:none;" title="Próxima loseta en el mazo">
+              <span class="floating-next-chip-text">Próx:</span>
+              <img id="floating-next-tile-img" src="assets/tiles/tile_back.png" class="floating-next-chip-img" alt="Próxima">
             </div>
           </div>
 
