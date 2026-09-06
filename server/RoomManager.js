@@ -84,17 +84,12 @@ class RoomManager {
   createRoom({ name, hostName, passCode, options = {} }) {
     this.cleanupStaleRooms();
 
-    // Prevent duplicate empty lobby rooms from the same host
-    if (hostName && !options.isLocal) {
-      const normHost = hostName.trim().toLowerCase();
-      for (const [id, existing] of this.rooms.entries()) {
-        if (!existing.isLocal && existing.status === 'lobby') {
-          const isSameHost = (existing.hostName && existing.hostName.trim().toLowerCase() === normHost) ||
-                             (existing.players[0] && existing.players[0].name.trim().toLowerCase() === normHost);
-          const hasNoOtherHumans = (existing.players || []).filter(p => !p.isBot && p.connected !== false).length <= 1;
-          if (isSameHost && hasNoOtherHumans) {
-            this.rooms.delete(id);
-          }
+    // Clean up completely empty (0 connected humans) abandoned lobby rooms
+    for (const [id, existing] of this.rooms.entries()) {
+      if (!existing.isLocal && existing.status === 'lobby') {
+        const connectedHumans = (existing.players || []).filter(p => !p.isBot && p.connected !== false).length;
+        if (connectedHumans === 0) {
+          this.rooms.delete(id);
         }
       }
     }
@@ -498,7 +493,11 @@ class RoomManager {
       }
 
       // Discard unplaceable tile as per official rules
-      this.addLog(room, `⚠️ La loseta "${tile.name || tile.id}" no tiene ninguna colocación legal posible y ha sido descartada según las reglas oficiales.`);
+      const tileTitle = tile.name || tile.id;
+      this.addLog(room, `⚠️ La loseta "${tileTitle}" no tiene ninguna colocación legal posible y ha sido descartada según las reglas oficiales.`);
+      if (this.io && room.id) {
+        this.io.to(room.id).emit('tile_discarded', { tileName: tileTitle });
+      }
     }
 
     room.currentTile = null;

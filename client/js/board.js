@@ -716,6 +716,21 @@ class BoardRenderer {
     }
   }
 
+  scheduleHighlightAnimation() {
+    if (this.highlightAnimFrame) return;
+    const loop = () => {
+      const now = Date.now();
+      if (this.lastPlacedPos && (now - (this.lastPlacedHighlightStart || 0) < 7500)) {
+        this.draw();
+        this.highlightAnimFrame = requestAnimationFrame(loop);
+      } else {
+        this.highlightAnimFrame = null;
+        this.draw();
+      }
+    };
+    this.highlightAnimFrame = requestAnimationFrame(loop);
+  }
+
   updateState({ board, validPlacements, currentTile, currentRotation, turnPhase, lastPlacedPos, segments, activePlayerColor, isMyTurn, hasMeeples }) {
     this.isSubmittingPlacement = false;
     const isFirstLoad = !this.boardData;
@@ -724,7 +739,13 @@ class BoardRenderer {
     this.currentTile = currentTile;
     this.currentRotation = currentRotation || 0;
     this.turnPhase = turnPhase || 'place_tile';
+
+    if (lastPlacedPos && (!this.lastPlacedPos || this.lastPlacedPos.x !== lastPlacedPos.x || this.lastPlacedPos.y !== lastPlacedPos.y)) {
+      this.lastPlacedHighlightStart = Date.now();
+      this.scheduleHighlightAnimation();
+    }
     this.lastPlacedPos = lastPlacedPos;
+
     this.meepleSegments = (segments || []).filter(s => !s.noMeeple && s.type !== 'river');
     this.activePlayerColor = activePlayerColor || 'red';
     this.isMyTurn = !!isMyTurn;
@@ -756,6 +777,9 @@ class BoardRenderer {
       this.drawPlacedTile(placed);
     }
 
+    // 2.1 Draw Glowing Highlight Border around the Last Placed & Confirmed Tile
+    this.drawLastPlacedHighlight();
+
     // 3. Draw Valid Placement Slots
     if (this.turnPhase === 'place_tile' && this.isMyTurn && this.validPlacements.length > 0) {
       for (const slot of this.validPlacements) {
@@ -782,6 +806,66 @@ class BoardRenderer {
 
     // 7. Dynamically update floating action buttons position next to active tile
     this.updateFloatingControlsPosition();
+  }
+
+  drawLastPlacedHighlight() {
+    if (!this.lastPlacedPos) return;
+    const now = Date.now();
+    const elapsed = now - (this.lastPlacedHighlightStart || 0);
+    if (elapsed > 7500) return;
+
+    const screen = this.gridToScreen(this.lastPlacedPos.x, this.lastPlacedPos.y);
+    const ctx = this.ctx;
+    ctx.save();
+
+    // Pulse factor with smooth decay over 7.5s
+    const decay = Math.max(0, 1 - elapsed / 7500);
+    const pulse = 0.5 + 0.5 * Math.sin(now / 140);
+    const alpha = (0.4 + 0.6 * pulse) * decay;
+
+    // Outer golden neon glow
+    ctx.shadowColor = '#f1c40f';
+    ctx.shadowBlur = (14 * pulse + 8) * decay;
+    ctx.strokeStyle = `rgba(241, 196, 15, ${alpha})`;
+    ctx.lineWidth = Math.max(3.5, 4.5 * this.zoom);
+    ctx.strokeRect(screen.x - 2, screen.y - 2, screen.size + 4, screen.size + 4);
+
+    // High-contrast Corner Brackets
+    const bracketLen = Math.max(14, 18 * this.zoom);
+    ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, alpha * 1.3)})`;
+    ctx.lineWidth = Math.max(2.5, 3.5 * this.zoom);
+    ctx.shadowColor = '#ffffff';
+    ctx.shadowBlur = 8 * decay;
+
+    // Top-Left
+    ctx.beginPath();
+    ctx.moveTo(screen.x - 5, screen.y - 5 + bracketLen);
+    ctx.lineTo(screen.x - 5, screen.y - 5);
+    ctx.lineTo(screen.x - 5 + bracketLen, screen.y - 5);
+    ctx.stroke();
+
+    // Top-Right
+    ctx.beginPath();
+    ctx.moveTo(screen.x + screen.size + 5 - bracketLen, screen.y - 5);
+    ctx.lineTo(screen.x + screen.size + 5, screen.y - 5);
+    ctx.lineTo(screen.x + screen.size + 5, screen.y - 5 + bracketLen);
+    ctx.stroke();
+
+    // Bottom-Left
+    ctx.beginPath();
+    ctx.moveTo(screen.x - 5, screen.y + screen.size + 5 - bracketLen);
+    ctx.lineTo(screen.x - 5, screen.y + screen.size + 5);
+    ctx.lineTo(screen.x - 5 + bracketLen, screen.y + screen.size + 5);
+    ctx.stroke();
+
+    // Bottom-Right
+    ctx.beginPath();
+    ctx.moveTo(screen.x + screen.size + 5 - bracketLen, screen.y + screen.size + 5);
+    ctx.lineTo(screen.x + screen.size + 5, screen.y + screen.size + 5);
+    ctx.lineTo(screen.x + screen.size + 5, screen.y + screen.size + 5 - bracketLen);
+    ctx.stroke();
+
+    ctx.restore();
   }
 
   drawLasers() {

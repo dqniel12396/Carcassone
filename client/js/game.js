@@ -480,6 +480,69 @@ function initEventListeners() {
     if (drawerBackdrop) drawerBackdrop.classList.toggle('active', isOpen);
   }
 
+  // ==================== CHAT UNREAD & FLOATING TOAST SYSTEM ====================
+  let unreadChatCount = 0;
+
+  function isChatVisible() {
+    if (warRoomView && warRoomView.style.display === 'flex') return true;
+    if (window.innerWidth <= 1024) {
+      return chatDrawer && chatDrawer.classList.contains('open');
+    } else {
+      return chatDrawer && !chatDrawer.classList.contains('collapsed');
+    }
+  }
+
+  function clearUnreadChat() {
+    unreadChatCount = 0;
+    const badges = document.querySelectorAll('.chat-unread-badge');
+    badges.forEach(b => {
+      b.style.display = 'none';
+      b.innerText = '0';
+    });
+    const chatBtns = [
+      document.getElementById('mobile-chat-toggle'),
+      document.getElementById('desktop-chat-toggle')
+    ];
+    chatBtns.forEach(btn => {
+      if (btn) btn.classList.remove('chat-has-unread');
+    });
+  }
+
+  function showFloatingChatToast(msg) {
+    const container = document.getElementById('floating-chat-container') || createFloatingChatContainer();
+    const toast = document.createElement('div');
+    toast.className = 'floating-chat-toast';
+    toast.innerHTML = `
+      <span class="floating-chat-avatar-dot" style="background-color:var(--color-${msg.color || 'yellow'})"></span>
+      <div class="floating-chat-body">
+        <strong class="floating-chat-author" style="color:var(--color-${msg.color || 'yellow'})">${escapeHtml(msg.author || 'Noble')}:</strong>
+        <span class="floating-chat-text">${escapeHtml(msg.text || '')}</span>
+      </div>
+    `;
+    container.appendChild(toast);
+
+    // Auto-remove after 4.2 seconds
+    setTimeout(() => {
+      toast.classList.add('fade-out');
+      setTimeout(() => toast.remove(), 400);
+    }, 4200);
+  }
+
+  function createFloatingChatContainer() {
+    let c = document.getElementById('floating-chat-container');
+    if (!c) {
+      c = document.createElement('div');
+      c.id = 'floating-chat-container';
+      c.className = 'floating-chat-container';
+      document.body.appendChild(c);
+    }
+    return c;
+  }
+
+  window.clearUnreadChat = clearUnreadChat;
+  window.isChatVisible = isChatVisible;
+  window.showFloatingChatToast = showFloatingChatToast;
+
   function toggleChatDrawer() {
     audio.playClick();
     if (window.innerWidth <= 1024) {
@@ -487,6 +550,7 @@ function initEventListeners() {
       if (sidePanel) sidePanel.classList.remove('open');
       if (mobileMoreDropdown) mobileMoreDropdown.style.display = 'none';
       if (drawerBackdrop) drawerBackdrop.classList.toggle('active', isOpen);
+      if (isOpen) clearUnreadChat();
     } else {
       toggleDesktopChat();
     }
@@ -600,6 +664,9 @@ function initEventListeners() {
     const isNowCollapsed = chatDrawer.classList.contains('collapsed');
     localStorage.setItem('carcassonne_chat_collapsed', isNowCollapsed ? '1' : '0');
     if (desktopChatToggle) desktopChatToggle.classList.toggle('active', !isNowCollapsed);
+    if (!isNowCollapsed) {
+      clearUnreadChat();
+    }
     requestAnimationFrame(() => {
       boardRenderer.resize();
     });
@@ -1250,17 +1317,26 @@ function initEventListeners() {
   }
 
   if (rematchBtn) {
-    rematchBtn.addEventListener('click', () => {
-      if (victoryModal) {
-        victoryModal.style.display = 'none';
-        delete victoryModal.dataset.shownForRoom;
-        delete victoryModal.dataset.manuallyClosed;
-      }
+    rematchBtn.addEventListener('click', async () => {
       if (currentRoom && currentRoom.isLocal) {
-        startLocalGame();
+        const ok = await showMedievalConfirm({
+          title: '¿Reiniciar Partida Local?',
+          message: '¿Deseas comenzar un nuevo duelo local en este tablero con los mismos participantes?',
+          icon: '🔄',
+          confirmText: '✓ Iniciar Partida',
+          confirmClass: 'btn-primary'
+        });
+        if (ok) {
+          if (victoryModal) {
+            victoryModal.style.display = 'none';
+            delete victoryModal.dataset.shownForRoom;
+            delete victoryModal.dataset.manuallyClosed;
+          }
+          startLocalGame();
+        }
       } else if (currentRoom) {
         audio.playClick();
-        showToast('Solicitud de revancha enviada a los contrincantes...', 'info');
+        showToast('⚔️ Solicitud de revancha enviada a los oponentes. Esperando confirmación...', 'info');
         socket.emit('request_rematch', {
           roomId: currentRoom.id,
           playerId: myPlayerId,
@@ -2347,6 +2423,29 @@ socket.on('new_chat', (msg) => {
     warRoomChatMessages.appendChild(div);
     warRoomChatMessages.scrollTop = warRoomChatMessages.scrollHeight;
   }
+
+  // Floating Toast and Unread Counter if chat panel is not open
+  const isMine = msg.playerId === myPlayerId || msg.author === getProfileName();
+  if (!isChatVisible() && !isMine) {
+    unreadChatCount++;
+    const badges = document.querySelectorAll('.chat-unread-badge');
+    badges.forEach(b => {
+      b.style.display = 'inline-flex';
+      b.innerText = String(unreadChatCount);
+    });
+    const chatBtns = [
+      document.getElementById('mobile-chat-toggle'),
+      document.getElementById('desktop-chat-toggle')
+    ];
+    chatBtns.forEach(btn => {
+      if (btn) btn.classList.add('chat-has-unread');
+    });
+    showFloatingChatToast(msg);
+  }
+});
+
+socket.on('tile_discarded', ({ tileName }) => {
+  showToast(`⚠️ Regla oficial: La loseta "${tileName || 'sin colocación legal'}" no tiene espacio válido en el reino y ha sido descartada. Robando nueva loseta...`, 'info');
 });
 
 socket.on('game_saved', ({ fileName }) => {
@@ -2776,10 +2875,47 @@ function renderVictoryPodium(rankings) {
   const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣', '6️⃣'];
   container.innerHTML = '';
 
+  const winner = rankings[0];
+  const runnerUp = rankings[1];
+  const maxScore = winner ? winner.score : 0;
+  const leadDiff = (winner && runnerUp) ? (winner.score - runnerUp.score) : 0;
+
+  // Render Difference Summary Header Banner
+  if (rankings.length >= 2 && winner && runnerUp) {
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'victory-diff-summary';
+    if (leadDiff === 0) {
+      summaryDiv.innerHTML = `<span>⚔️ <strong>¡Empate Histórico en la Cima!</strong> Ambos líderes finalizaron con ${maxScore} pts.</span>`;
+    } else {
+      summaryDiv.innerHTML = `
+        <span>⚔️ <strong>Margen de Victoria: +${leadDiff} pts de diferencia</strong></span>
+        <span style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(winner.name)} superó a ${escapeHtml(runnerUp.name)} por una ventaja de ${leadDiff} puntos.</span>
+      `;
+    }
+    container.appendChild(summaryDiv);
+  }
+
   rankings.forEach((p, idx) => {
     const pAvatar = window.profileManager ? window.profileManager.getAvatar(p.avatar) : { icon: '👤', title: 'Noble' };
     const card = document.createElement('div');
     card.className = `rank-card rank-${idx + 1}`;
+    
+    let diffHtml = '';
+    if (idx === 0 && rankings.length > 1) {
+      if (leadDiff > 0) {
+        diffHtml = `<span class="rank-diff-badge winner-diff">+${leadDiff} pts ventaja</span>`;
+      } else {
+        diffHtml = `<span class="rank-diff-badge winner-diff" style="background:rgba(241,196,15,0.2);color:#f1c40f;border-color:rgba(241,196,15,0.4);">👑 Empate</span>`;
+      }
+    } else if (idx > 0) {
+      const diffFromWinner = maxScore - p.score;
+      if (diffFromWinner > 0) {
+        diffHtml = `<span class="rank-diff-badge runner-diff">-${diffFromWinner} pts diferencia</span>`;
+      } else {
+        diffHtml = `<span class="rank-diff-badge winner-diff" style="background:rgba(241,196,15,0.2);color:#f1c40f;border-color:rgba(241,196,15,0.4);">👑 Empate</span>`;
+      }
+    }
+
     card.innerHTML = `
       <span class="rank-badge">${medals[idx] || '🎖️'}</span>
       <div class="rank-player-info">
@@ -2787,7 +2923,10 @@ function renderVictoryPodium(rankings) {
         <img src="assets/meeples/meeple_${p.color}.svg" style="width:28px;height:28px;" />
         <span class="rank-player-name">${escapeHtml(p.name)}</span>
       </div>
-      <span class="rank-score">${p.score} pts</span>
+      <div style="display:flex; flex-direction:column; align-items:flex-end;">
+        <span class="rank-score">${p.score} pts</span>
+        ${diffHtml}
+      </div>
     `;
     container.appendChild(card);
   });

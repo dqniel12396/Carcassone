@@ -831,7 +831,8 @@ io.on('connection', (socket) => {
     if (!targetRoomId) return;
     const requesterName = data.playerName || 'Un rival';
     const requesterId = data.playerId || currentPlayerId || socket.id;
-    io.to(targetRoomId).emit('rematch_requested', {
+    // Broadcast to everyone else in the room
+    socket.to(targetRoomId).emit('rematch_requested', {
       requesterId,
       requesterName,
       roomId: targetRoomId
