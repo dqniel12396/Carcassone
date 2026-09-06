@@ -196,13 +196,27 @@ class BoardRenderer {
     };
   }
 
+  scheduleLaserDraw() {
+    if (this.laserAnimFrame) return;
+    const loop = () => {
+      if (this.lasers.size > 0 || this.laserMode) {
+        this.draw();
+        this.laserAnimFrame = requestAnimationFrame(loop);
+      } else {
+        this.laserAnimFrame = null;
+        this.draw();
+      }
+    };
+    this.laserAnimFrame = requestAnimationFrame(loop);
+  }
+
   setLaser(playerId, data) {
     if (!data || !data.active) {
       this.lasers.delete(playerId);
     } else {
       const now = Date.now();
       const existing = this.lasers.get(playerId) || { trail: [] };
-      const newTrail = existing.trail.filter(pt => now - pt.time < 500);
+      const newTrail = existing.trail.filter(pt => now - pt.time < 1200);
       newTrail.push({ x: data.worldX, y: data.worldY, time: now });
       this.lasers.set(playerId, {
         id: playerId,
@@ -214,13 +228,13 @@ class BoardRenderer {
         trail: newTrail
       });
     }
-    this.draw();
+    this.scheduleLaserDraw();
   }
 
   removeLaser(playerId) {
     if (this.lasers.has(playerId)) {
       this.lasers.delete(playerId);
-      this.draw();
+      this.scheduleLaserDraw();
     }
   }
 
@@ -309,7 +323,7 @@ class BoardRenderer {
       if (this.isDragging) {
         const dx = (e.clientX - this.dragStartX) - this.panX;
         const dy = (e.clientY - this.dragStartY) - this.panY;
-        if (Math.hypot(dx, dy) > 12) {
+        if (Math.hypot(dx, dy) > 8) {
           this.hasMoved = true;
           this.setHudDimmed(true);
         }
@@ -317,7 +331,9 @@ class BoardRenderer {
         this.panX = e.clientX - this.dragStartX;
         this.panY = e.clientY - this.dragStartY;
         this.draw();
-      } else if (mouseX >= 0 && mouseX <= this.width && mouseY >= 0 && mouseY <= this.height) {
+      }
+
+      if (mouseX >= 0 && mouseX <= this.width && mouseY >= 0 && mouseY <= this.height) {
         if (this.laserMode) {
           const worldX = (mouseX - this.panX) / this.zoom;
           const worldY = (mouseY - this.panY) / this.zoom;
@@ -328,9 +344,9 @@ class BoardRenderer {
         this.hoverGridX = gridPos.x;
         this.hoverGridY = gridPos.y;
 
-        // Check meeple hover
+        // Check meeple hover (only when not in laser mode)
         let foundDot = null;
-        if (this.turnPhase === 'place_meeple' && this.lastPlacedPos && this.isMyTurn && this.hasMeeples) {
+        if (!this.laserMode && this.turnPhase === 'place_meeple' && this.lastPlacedPos && this.isMyTurn && this.hasMeeples) {
           const screen = this.gridToScreen(this.lastPlacedPos.x, this.lastPlacedPos.y);
           for (const seg of this.meepleSegments) {
             if (seg.noMeeple || seg.type === 'river') continue;
@@ -361,6 +377,11 @@ class BoardRenderer {
 
       // Ignore synthetic mouse events emitted by mobile browsers after touch
       if (this.lastTouchTime && (Date.now() - this.lastTouchTime < 650)) {
+        return;
+      }
+
+      // If in laser mode, do NOT trigger any board click action
+      if (this.laserMode) {
         return;
       }
 
@@ -399,6 +420,8 @@ class BoardRenderer {
         const rect = this.canvas.getBoundingClientRect();
         
         if (this.laserMode) {
+          // 1 Finger in laser mode: Draw laser trace without moving the map
+          if (e.cancelable) e.preventDefault();
           this.isDragging = false;
           this.hasMoved = false;
           const tX = t.clientX - rect.left;
@@ -413,6 +436,7 @@ class BoardRenderer {
           this.dragStartY = t.clientY - this.panY;
         }
       } else if (e.touches.length === 2) {
+        // 2 Fingers: Pinch to zoom and map panning (works in both normal and laser mode)
         this.isDragging = false;
         this.setHudDimmed(true);
         const t1 = e.touches[0];
@@ -424,7 +448,7 @@ class BoardRenderer {
           y: (t1.clientY + t2.clientY) / 2
         };
       }
-    }, { passive: true });
+    }, { passive: false });
 
     this.canvas.addEventListener('touchmove', (e) => {
       this.lastTouchTime = Date.now();
@@ -433,6 +457,9 @@ class BoardRenderer {
         const rect = this.canvas.getBoundingClientRect();
 
         if (this.laserMode) {
+          // 1 Finger: Smooth laser tracing across screen (does NOT move the map)
+          if (e.cancelable) e.preventDefault();
+          this.isDragging = false;
           const tX = t.clientX - rect.left;
           const tY = t.clientY - rect.top;
           const worldX = (tX - this.panX) / this.zoom;
@@ -467,17 +494,19 @@ class BoardRenderer {
           this.draw();
         }
       }
-    }, { passive: true });
+    }, { passive: false });
 
     this.canvas.addEventListener('touchend', (e) => {
       this.lastTouchTime = Date.now();
       this.setHudDimmed(false);
 
       if (this.laserMode) {
-        if (this.onLaserLeave) this.onLaserLeave();
+        if (e.touches.length === 0 && this.onLaserLeave) {
+          this.onLaserLeave();
+        }
         this.isDragging = false;
         this.touchStartDist = 0;
-        return;
+        return; // Never trigger placement actions in laser mode
       }
 
       if (this.isDragging && !this.hasMoved && e.changedTouches.length === 1) {
@@ -528,6 +557,9 @@ class BoardRenderer {
   }
 
   handleCanvasClick(screenX, screenY) {
+    // In laser mode, completely block all canvas tile placement, meeples, and rotation
+    if (this.laserMode) return;
+
     if (window.closeAllMobileDrawers) window.closeAllMobileDrawers();
     if (this.isSubmittingPlacement) return; // Prevent duplicate rapid clicks
 
@@ -600,9 +632,17 @@ class BoardRenderer {
         this.rotatePendingTile(1);
         return;
       }
+
+      // Tap outside -> cancel or move pending tile
+      const clickedGrid = this.screenToGrid(screenX, screenY);
+      if (clickedGrid.x === this.pendingPos.x && clickedGrid.y === this.pendingPos.y) {
+        return;
+      }
+      this.clearPendingTile();
+      return;
     }
 
-    // 3. Clicked on an open valid slot -> Set Pending In-Place Tile
+    // 3. Normal Tile Placement phase: tap on valid slot
     const grid = this.screenToGrid(screenX, screenY);
     if (this.turnPhase === 'place_tile' && this.isMyTurn) {
       const slot = this.validPlacements.find(p => p.x === grid.x && p.y === grid.y);

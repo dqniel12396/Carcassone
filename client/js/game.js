@@ -168,29 +168,44 @@ function toggleLaserPointer(forceState) {
   const newState = (forceState !== undefined) ? forceState : !boardRenderer.laserMode;
   boardRenderer.laserMode = newState;
 
+  const canvas = document.getElementById('board-canvas');
+  if (canvas) {
+    canvas.classList.toggle('laser-mode-active', newState);
+  }
+
   const toggleBtn = document.getElementById('laser-pointer-toggle-btn');
   const boardBtn = document.getElementById('board-laser-btn');
   const mobileBtn = document.getElementById('mobile-laser-btn');
+  const mobileDropdownBtn = document.getElementById('mobile-laser-dropdown-btn');
 
-  [toggleBtn, boardBtn, mobileBtn].forEach(btn => {
+  [toggleBtn, boardBtn, mobileBtn, mobileDropdownBtn].forEach(btn => {
     if (btn) {
       btn.classList.toggle('active', newState);
       if (btn === toggleBtn) {
         btn.innerText = newState ? '🔴 Láser: ON' : '🔴 Láser';
       }
+      if (btn === mobileDropdownBtn) {
+        btn.innerText = newState ? '🔴 Láser: ON' : '🔴 Puntero Láser';
+      }
     }
   });
 
   if (newState) {
-    showToast('🔴 Modo Láser activado (Mueve el ratón para señalar)', 'info');
-  }
-
-  if (!newState && currentRoom) {
-    socket.emit('laser_pointer_move', {
-      roomId: currentRoom.id,
-      playerId: myPlayerId,
-      active: false
-    });
+    const isMobile = window.innerWidth <= 1024;
+    showToast(isMobile 
+      ? '🔴 Modo Láser: Traza con 1 dedo para señalar (Usa 2 dedos para mover mapa)'
+      : '🔴 Modo Láser: Mueve o arrastra el cursor para señalar (Acciones de loseta bloqueadas)', 
+      'info'
+    );
+  } else {
+    boardRenderer.removeLaser(myPlayerId);
+    if (currentRoom) {
+      socket.emit('laser_pointer_move', {
+        roomId: currentRoom.id,
+        playerId: myPlayerId,
+        active: false
+      });
+    }
   }
 }
 window.toggleLaserPointer = toggleLaserPointer;
@@ -218,26 +233,36 @@ window.addEventListener('DOMContentLoaded', () => {
     onCancelPlacement: () => cancelTilePlacement(),
     onPendingStateChange: (state) => updatePendingTileUI(state),
     onLaserMove: (worldX, worldY) => {
-      if (!currentRoom) return;
       const myColor = colorSelect?.value || window.profileManager?.profile?.color || 'yellow';
       const myName = getProfileName();
-      socket.emit('laser_pointer_move', {
-        roomId: currentRoom.id,
-        playerId: myPlayerId,
+      boardRenderer.setLaser(myPlayerId, {
         playerName: myName,
         playerColor: myColor,
         worldX,
         worldY,
         active: true
       });
+      if (currentRoom) {
+        socket.emit('laser_pointer_move', {
+          roomId: currentRoom.id,
+          playerId: myPlayerId,
+          playerName: myName,
+          playerColor: myColor,
+          worldX,
+          worldY,
+          active: true
+        });
+      }
     },
     onLaserLeave: () => {
-      if (!currentRoom) return;
-      socket.emit('laser_pointer_move', {
-        roomId: currentRoom.id,
-        playerId: myPlayerId,
-        active: false
-      });
+      boardRenderer.removeLaser(myPlayerId);
+      if (currentRoom) {
+        socket.emit('laser_pointer_move', {
+          roomId: currentRoom.id,
+          playerId: myPlayerId,
+          active: false
+        });
+      }
     }
   });
 
@@ -1638,7 +1663,8 @@ function renderRoomsList(rooms) {
     const hostAvatarObj = window.profileManager ? window.profileManager.getAvatar(r.hostAvatar) : { icon: '👑', name: 'Noble' };
     const playersHtml = (r.players || []).map(p => {
       const pAv = window.profileManager ? window.profileManager.getAvatar(p.avatar) : { icon: '👤' };
-      return `<span class="room-player-pill" title="${escapeHtml(p.name)} (${p.color})">${pAv.icon} ${escapeHtml(p.name)}</span>`;
+      const isOnline = p.connected !== false;
+      return `<span class="room-player-pill" title="${escapeHtml(p.name)} (${p.color}) - ${isOnline ? 'En línea' : 'Desconectado'}"><span class="online-status-dot ${isOnline ? 'online' : 'offline'}"></span>${pAv.icon} ${escapeHtml(p.name)}</span>`;
     }).join('');
 
     const norm = s => String(s || '').trim().toLowerCase();
@@ -1924,10 +1950,12 @@ async function deleteSavedGame(saveName) {
 }
 
 async function promptSaveGame() {
-  const defaultName = `partida_${new Date().toISOString().slice(0, 10)}`;
+  const defaultName = currentRoom?.saveFileName || 
+                      (currentRoom?.name ? currentRoom.name.replace(/[^a-zA-Z0-9_-]/g, '_') : '') || 
+                      `partida_${currentRoom?.id || 'reino'}`;
   const name = await showMedievalPrompt({
     title: 'Guardar Partida en el Reino',
-    message: 'Introduce un nombre para registrar el pergamino de tu partida:',
+    message: 'Introduce un nombre para registrar tu partida (si ya existe, se actualizará esta misma partida para evitar duplicados):',
     defaultValue: defaultName,
     placeholder: 'Nombre de la partida',
     icon: '💾',
@@ -2165,8 +2193,10 @@ function renderWarRoom(room) {
         ? '<span class="badge badge-success" style="font-size:0.75rem; margin-left:6px;">✅ Listo</span>'
         : '<span class="badge badge-warning" style="font-size:0.75rem; margin-left:6px;">⏳ Preparando</span>';
 
+      const isOnline = p.isBot || p.connected !== false;
       item.innerHTML = `
         <div class="war-room-player-left">
+          <span class="online-status-dot ${isOnline ? 'online' : 'offline'}" title="${isOnline ? 'Conectado en la sala' : 'Desconectado'}"></span>
           <span class="player-avatar-icon-mini" title="${pAvatar.title}">${p.isBot ? '🤖' : pAvatar.icon}</span>
           <div style="width:18px; height:18px; border-radius:50%; background-color:var(--color-${p.color}); border:2px solid var(--border-iron); box-shadow:0 0 6px var(--color-${p.color});"></div>
           <span style="font-family:var(--font-heading); font-weight:700; font-size:1.05rem; color:var(--on-surface);">
@@ -2658,10 +2688,12 @@ function renderPlayers(room) {
     const isIdle = !room.isLocal && !p.isBot && p.connected === false;
     const pAvatar = window.profileManager ? window.profileManager.getAvatar(p.avatar) : { icon: '👤', title: 'Noble' };
 
+    const isOnline = room.isLocal || p.isBot || p.connected !== false;
     const div = document.createElement('div');
     div.className = `player-card ${isActive ? 'active-turn' : ''} ${isIdle ? 'player-idle' : ''}`;
     div.innerHTML = `
       <div class="player-avatar-wrap">
+        <span class="online-status-dot ${isOnline ? 'online' : 'offline'}" title="${isOnline ? 'En línea en la partida' : 'Desconectado'}"></span>
         <span class="player-card-avatar" title="${pAvatar.title}">${p.isBot ? '🤖' : pAvatar.icon}</span>
         <img src="assets/meeples/meeple_${p.color}.svg" class="player-meeple-icon" />
         <span class="player-name">${escapeHtml(p.name)} ${isMe ? (room.isLocal ? '(Turno)' : '(Tú)') : ''}</span>

@@ -3971,3 +3971,69 @@ kbd {
     margin-top: 4px;
   }
 }
+
+/* ==========================================================================
+   ONLINE PRESENCE INDICATOR (GREEN LIGHT / LUZ VERDE)
+   ========================================================================== */
+.online-status-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  min-width: 9px;
+  min-height: 9px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.online-status-dot.online {
+  background-color: #2ecc71;
+  box-shadow: 0 0 6px #2ecc71, 0 0 10px rgba(46, 204, 113, 0.7);
+  animation: pulseOnlineGreen 2.2s infinite ease-in-out;
+}
+
+.online-status-dot.offline {
+  background-color: #95a5a6;
+  box-shadow: none;
+  opacity: 0.55;
+}
+
+@keyframes pulseOnlineGreen {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 4px #2ecc71;
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 9px #2ecc71, 0 0 14px rgba(46, 204, 113, 0.85);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 4px #2ecc71;
+  }
+}
+
+/* ==========================================================================
+   LASER POINTER ACTIVE STATE & CONTROLS
+   ========================================================================== */
+#board-canvas.laser-mode-active {
+  cursor: crosshair !important;
+}
+
+#laser-pointer-toggle-btn.active,
+#board-laser-btn.active,
+#mobile-laser-btn.active {
+  background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+  color: #ffffff !important;
+  border-color: #ff7675 !important;
+  box-shadow: 0 0 12px rgba(231, 76, 60, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.3) !important;
+  animation: pulseLaserBtn 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseLaserBtn {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(231, 76, 60, 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 0 16px rgba(231, 76, 60, 0.85); }
+}
+

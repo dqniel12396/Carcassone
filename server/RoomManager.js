@@ -53,7 +53,52 @@ class RoomManager {
     this.rooms = new Map();
   }
 
+  cleanupStaleRooms() {
+    const now = Date.now();
+    for (const [id, r] of this.rooms.entries()) {
+      if (r.isLocal) continue;
+      // 1. Lobby rooms with 0 connected players or older than 15 minutes with no game started
+      const activeHumans = (r.players || []).filter(p => !p.isBot && p.connected !== false).length;
+      if (r.status === 'lobby') {
+        if (activeHumans === 0 && (now - r.createdAt > 3 * 60 * 1000)) {
+          this.rooms.delete(id);
+          continue;
+        }
+        if (now - r.createdAt > 2 * 3600 * 1000) {
+          this.rooms.delete(id);
+          continue;
+        }
+      }
+      // 2. Ended rooms older than 30 minutes
+      if (r.status === 'ended' && (now - r.createdAt > 30 * 60 * 1000)) {
+        this.rooms.delete(id);
+        continue;
+      }
+      // 3. Stale rooms with all disconnected players older than 4 hours
+      if (r.players && r.players.length > 0 && r.players.every(p => p.connected === false) && (now - r.createdAt > 4 * 3600 * 1000)) {
+        this.rooms.delete(id);
+      }
+    }
+  }
+
   createRoom({ name, hostName, passCode, options = {} }) {
+    this.cleanupStaleRooms();
+
+    // Prevent duplicate empty lobby rooms from the same host
+    if (hostName && !options.isLocal) {
+      const normHost = hostName.trim().toLowerCase();
+      for (const [id, existing] of this.rooms.entries()) {
+        if (!existing.isLocal && existing.status === 'lobby') {
+          const isSameHost = (existing.hostName && existing.hostName.trim().toLowerCase() === normHost) ||
+                             (existing.players[0] && existing.players[0].name.trim().toLowerCase() === normHost);
+          const hasNoOtherHumans = (existing.players || []).filter(p => !p.isBot && p.connected !== false).length <= 1;
+          if (isSameHost && hasNoOtherHumans) {
+            this.rooms.delete(id);
+          }
+        }
+      }
+    }
+
     const roomId = 'room_' + Math.random().toString(36).substring(2, 8).toUpperCase();
     const room = {
       id: roomId,
@@ -64,6 +109,7 @@ class RoomManager {
       createdAt: Date.now(),
       status: 'lobby', // 'lobby' | 'playing' | 'ended'
       isLocal: !!options.isLocal,
+      saveFileName: options.saveFileName || null,
       players: [],
       turnIndex: 0,
       turnNumber: 1,
@@ -94,6 +140,7 @@ class RoomManager {
   }
 
   listRooms() {
+    this.cleanupStaleRooms();
     return Array.from(this.rooms.values())
       .filter(r => !r.isLocal && r.status !== 'ended')
       .map(r => ({
@@ -111,7 +158,8 @@ class RoomManager {
           avatar: p.avatar || (p.isBot ? 'bot' : 'knight'),
           color: p.color,
           isHost: !!p.isHost,
-          isBot: !!p.isBot
+          isBot: !!p.isBot,
+          connected: p.connected !== false
         }))
       }));
   }
@@ -427,8 +475,13 @@ class RoomManager {
       } else {
         this.addLog(room, `${p.name} ha salido de la sala.`);
       }
-      if (room.players.every(x => !x.connected) && room.status === 'lobby') {
+      const activeHumans = room.players.filter(x => !x.isBot && x.connected !== false).length;
+      if (activeHumans === 0 && room.status === 'lobby') {
         this.rooms.delete(roomId);
+      }
+      if (this.io) {
+        this.io.to(roomId).emit('room_updated', this.serializeRoom(room));
+        this.io.emit('rooms_list', this.listRooms());
       }
     }
   }
@@ -1023,13 +1076,19 @@ class RoomManager {
     const room = this.getRoom(roomId);
     if (!room) return { error: 'Sala no encontrada' };
 
-    const safeName = (saveName || `partida_${room.id}_${Date.now()}`).replace(/[^a-zA-Z0-9_-]/g, '_');
+    // Determine consistent save name without random timestamps to prevent duplicate files
+    let chosenName = (saveName || room.saveFileName || room.name || `partida_${room.id}`).trim();
+    if (chosenName.endsWith('.json')) chosenName = chosenName.replace(/\.json$/i, '');
+    const safeName = chosenName.replace(/[^a-zA-Z0-9_-]/g, '_');
     const fileName = safeName + '.json';
     const filePath = path.join(SAVES_DIR, fileName);
+
+    room.saveFileName = safeName;
 
     const saveData = {
       id: room.id,
       name: room.name,
+      saveFileName: safeName,
       savedAt: new Date().toISOString(),
       status: room.status,
       players: room.players,
@@ -1051,12 +1110,13 @@ class RoomManager {
 
     fs.writeFileSync(filePath, JSON.stringify(saveData, null, 2), 'utf-8');
     this.addLog(room, `Partida guardada como "${fileName}".`);
-    return { success: true, fileName };
+    return { success: true, fileName, room: this.serializeRoom(room) };
   }
 
   loadGame(saveName) {
     const safeName = path.basename(saveName).replace(/[^a-zA-Z0-9_.-]/g, '_');
     const fileName = safeName.endsWith('.json') ? safeName : `${safeName}.json`;
+    const baseSaveName = fileName.replace(/\.json$/i, '');
     const filePath = path.join(SAVES_DIR, fileName);
 
     if (!fs.existsSync(filePath)) {
@@ -1066,15 +1126,24 @@ class RoomManager {
     const raw = fs.readFileSync(filePath, 'utf-8');
     const saveData = JSON.parse(raw);
 
+    // Check if a room with this save file is already active to prevent duplicate rooms
+    for (const existingRoom of this.rooms.values()) {
+      if (existingRoom.saveFileName === baseSaveName || (saveData.id && existingRoom.id === saveData.id)) {
+        return { success: true, room: this.serializeRoom(existingRoom), reconnected: true };
+      }
+    }
+
     const room = this.createRoom({
       name: saveData.name || 'Partida Cargada',
       options: {
         sandboxMode: saveData.sandboxMode,
         autoRules: saveData.autoRules,
-        includeRiver: saveData.includeRiver
+        includeRiver: saveData.includeRiver,
+        saveFileName: baseSaveName
       }
     });
 
+    room.saveFileName = baseSaveName;
     room.status = saveData.status;
     room.players = saveData.players || [];
     room.turnIndex = saveData.turnIndex || 0;
