@@ -4313,5 +4313,58 @@ kbd {
   object-fit: cover;
 }
 
+/* Chess Clock Timer Badges */
+.stat-badge.timer-badge {
+  background: rgba(20, 16, 14, 0.7);
+  border: 1px solid var(--border-iron, #44372c);
+  color: var(--on-surface-variant, #d5c8be);
+  font-family: monospace, var(--font-body);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+
+.stat-badge.timer-badge.active-timer {
+  background: linear-gradient(135deg, rgba(233, 193, 118, 0.25), rgba(45, 33, 22, 0.8));
+  border-color: var(--primary, #e9c176);
+  color: var(--primary, #e9c176);
+  box-shadow: 0 0 10px rgba(233, 193, 118, 0.35);
+  animation: timerPulse 2s infinite ease-in-out;
+}
+
+.stat-badge.timer-badge.timer-critical {
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.35), rgba(100, 20, 20, 0.8)) !important;
+  border-color: #e74c3c !important;
+  color: #ff7675 !important;
+  box-shadow: 0 0 12px rgba(231, 76, 60, 0.6) !important;
+  animation: timerCriticalPulse 0.8s infinite alternate ease-in-out !important;
+}
+
+.stat-badge.timer-badge.timer-zero {
+  background: rgba(100, 20, 20, 0.9) !important;
+  border-color: #c0392b !important;
+  color: #fab1a0 !important;
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+@keyframes timerPulse {
+  0% { box-shadow: 0 0 4px rgba(233, 193, 118, 0.2); }
+  50% { box-shadow: 0 0 12px rgba(233, 193, 118, 0.5); }
+  100% { box-shadow: 0 0 4px rgba(233, 193, 118, 0.2); }
+}
+
+@keyframes timerCriticalPulse {
+  0% { transform: scale(1); box-shadow: 0 0 6px rgba(231, 76, 60, 0.4); }
+  100% { transform: scale(1.05); box-shadow: 0 0 16px rgba(231, 76, 60, 0.8); }
+}
+
+
 
 

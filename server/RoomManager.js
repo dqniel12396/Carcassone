@@ -95,6 +95,7 @@ class RoomManager {
     }
 
     const roomId = 'room_' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const timeLimitSecs = options.timeLimit !== undefined ? parseInt(options.timeLimit, 10) : 900;
     const room = {
       id: roomId,
       name: name || `Sala de Carcassonne ${roomId}`,
@@ -105,6 +106,9 @@ class RoomManager {
       status: 'lobby', // 'lobby' | 'playing' | 'ended'
       isLocal: !!options.isLocal,
       saveFileName: options.saveFileName || null,
+      timeLimit: timeLimitSecs,
+      timerInterval: null,
+      lastTickTime: null,
       players: [],
       turnIndex: 0,
       turnNumber: 1,
@@ -199,6 +203,8 @@ class RoomManager {
         sound: playerSound,
         score: 0,
         meeples: 7,
+        timeRemaining: (room.timeLimit !== undefined && room.timeLimit > 0) ? room.timeLimit : 900,
+        timedOut: false,
         isHost: room.players.length === 0,
         isBot: false,
         connected: true
@@ -300,50 +306,61 @@ class RoomManager {
   }
 
   createLocalGame({ name, players = [], options = {} }) {
+    const timeLimitSecs = options.timeLimit !== undefined ? parseInt(options.timeLimit, 10) : 900;
     const room = this.createRoom({
       name: name || 'Partida Local / Vs Bots',
-      options: { ...options, isLocal: true }
+      options: {
+        sandboxMode: options.sandboxMode,
+        autoRules: options.autoRules !== false,
+        includeRiver: options.includeRiver !== false,
+        isLocal: true,
+        timeLimit: timeLimitSecs
+      }
     });
 
     const usedColors = [];
     const usedSounds = [];
-    players.forEach((pConfig, index) => {
-      let color = pConfig.color;
-      if (!color || usedColors.includes(color)) {
-        const freeColor = PLAYER_COLORS.find(c => !usedColors.includes(c.id));
-        color = freeColor ? freeColor.id : 'red';
-      }
-      usedColors.push(color);
+    if (players && players.length > 0) {
+      players.forEach((pConfig, index) => {
+        let color = pConfig.color;
+        if (!color || usedColors.includes(color)) {
+          const freeColor = PLAYER_COLORS.find(c => !usedColors.includes(c.id));
+          color = freeColor ? freeColor.id : 'red';
+        }
+        usedColors.push(color);
 
-      let sound = pConfig.sound;
-      if (!sound || usedSounds.includes(sound)) {
-        const freeSound = TURN_SOUNDS.find(s => !usedSounds.includes(s.id));
-        sound = freeSound ? freeSound.id : TURN_SOUNDS[index % TURN_SOUNDS.length].id;
-      }
-      usedSounds.push(sound);
+        let sound = pConfig.sound;
+        if (!sound || usedSounds.includes(sound)) {
+          const freeSound = TURN_SOUNDS.find(s => !usedSounds.includes(s.id));
+          sound = freeSound ? freeSound.id : TURN_SOUNDS[index % TURN_SOUNDS.length].id;
+        }
+        usedSounds.push(sound);
 
-      room.players.push({
-        id: pConfig.isBot ? `bot_${index}_${Date.now()}` : `local_${index}_${Date.now()}`,
-        name: pConfig.name || (pConfig.isBot ? `🤖 Bot ${index + 1}` : `Jugador ${index + 1}`),
-        color,
-        sound,
-        score: 0,
-        meeples: 7,
-        isHost: index === 0,
-        isBot: !!pConfig.isBot,
-        difficulty: pConfig.difficulty || 'medium',
-        connected: true
+        room.players.push({
+          id: pConfig.id || (pConfig.isBot ? `bot_${index}_${Date.now()}` : `local_${index}_${Date.now()}`),
+          name: pConfig.name || (pConfig.isBot ? `🤖 Bot ${index + 1}` : `Jugador ${index + 1}`),
+          color,
+          sound,
+          score: 0,
+          meeples: 7,
+          timeRemaining: timeLimitSecs > 0 ? timeLimitSecs : 900,
+          timedOut: false,
+          isHost: index === 0,
+          isBot: !!pConfig.isBot,
+          difficulty: pConfig.difficulty || 'medium',
+          connected: true
+        });
       });
-    });
-
-    if (room.players.length === 0) {
+    } else {
       room.players.push({
-        id: 'local_1',
+        id: 'local_p_1',
         name: 'Jugador 1',
         color: 'red',
-        sound: 'horn',
+        sound: 'trumpet',
         score: 0,
         meeples: 7,
+        timeRemaining: timeLimitSecs > 0 ? timeLimitSecs : 900,
+        timedOut: false,
         isHost: true,
         isBot: false,
         connected: true
@@ -355,6 +372,8 @@ class RoomManager {
         sound: 'bell',
         score: 0,
         meeples: 7,
+        timeRemaining: timeLimitSecs > 0 ? timeLimitSecs : 900,
+        timedOut: false,
         isHost: false,
         isBot: true,
         difficulty: 'medium',
@@ -395,6 +414,7 @@ class RoomManager {
     this.drawNextValidTile(room);
     const startPlayer = room.players[room.turnIndex];
     this.addLog(room, `🎲 ¡Partida Local iniciada! Se eligió aleatoriamente a ${startPlayer.name} para comenzar.`);
+    this.startRoomTimer(room);
     this.checkTriggerBot(room);
 
     return { room: this.serializeRoom(room) };
@@ -403,6 +423,7 @@ class RoomManager {
   deleteRoom(roomId, hostId, hostName = null) {
     const room = this.getRoom(roomId);
     if (!room) return { error: 'Sala no encontrada' };
+    this.stopRoomTimer(room);
 
     const norm = (s) => String(s || '').trim().toLowerCase();
     const reqName = norm(hostName);
@@ -533,6 +554,8 @@ class RoomManager {
     room.players.forEach(p => {
       p.score = 0;
       p.meeples = 7;
+      p.timeRemaining = (room.timeLimit !== undefined && room.timeLimit > 0) ? room.timeLimit : 900;
+      p.timedOut = false;
     });
 
     ReplayManager.startRecording(room);
@@ -557,6 +580,7 @@ class RoomManager {
     const startPlayer = room.players[room.turnIndex];
     this.addLog(room, `🎲 ¡Partida iniciada! Se eligió aleatoriamente a ${startPlayer.name} para comenzar.`);
 
+    this.startRoomTimer(room);
     this.checkTriggerBot(room);
     return { room: this.serializeRoom(room) };
   }
@@ -832,6 +856,7 @@ class RoomManager {
     });
 
     room.status = 'ended';
+    this.stopRoomTimer(room);
 
     // In 2-player matches, ensure opponent gets the higher score if needed
     const otherPlayers = room.players.filter(p => p.id !== playerId);
@@ -928,6 +953,7 @@ class RoomManager {
 
     if (!room.currentTile) {
       // Execute End Game Final Scoring!
+      this.stopRoomTimer(room);
       const finalRes = room.rules.calculateFinalScores();
       finalRes.scoredFeatures.forEach(feat => {
         ReplayManager.recordFeatureScored(room.id, feat);
@@ -944,6 +970,7 @@ class RoomManager {
       this.addLog(room, `¡Se han agotado todas las losetas! Fin de la partida.`);
     } else {
       room.turnIndex = (room.turnIndex + 1) % room.players.length;
+      room.lastTickTime = Date.now();
       const nextPlayer = room.players[room.turnIndex];
       this.addLog(room, `Turno de ${nextPlayer.name}.`);
     }
@@ -1090,6 +1117,7 @@ class RoomManager {
       saveFileName: safeName,
       savedAt: new Date().toISOString(),
       status: room.status,
+      timeLimit: room.timeLimit !== undefined ? room.timeLimit : 900,
       players: room.players,
       turnIndex: room.turnIndex,
       turnNumber: room.turnNumber,
@@ -1264,6 +1292,95 @@ class RoomManager {
     return snapshot;
   }
 
+  startRoomTimer(room) {
+    this.stopRoomTimer(room);
+    if (!room || room.status !== 'playing' || !room.timeLimit || room.timeLimit <= 0) return;
+    room.lastTickTime = Date.now();
+
+    room.timerInterval = setInterval(() => {
+      try {
+        if (!room || room.status !== 'playing') {
+          this.stopRoomTimer(room);
+          return;
+        }
+        const activePlayer = room.players[room.turnIndex];
+        if (!activePlayer) {
+          room.lastTickTime = Date.now();
+          return;
+        }
+
+        const now = Date.now();
+        const deltaSeconds = Math.max(1, Math.round((now - (room.lastTickTime || now)) / 1000));
+        room.lastTickTime = now;
+
+        if (activePlayer.timeRemaining === undefined) {
+          activePlayer.timeRemaining = room.timeLimit;
+        }
+        activePlayer.timeRemaining = Math.max(0, activePlayer.timeRemaining - deltaSeconds);
+
+        if (activePlayer.timeRemaining <= 0) {
+          this.handleTimeout(room, activePlayer);
+          return;
+        }
+
+        if (this.io && room.id) {
+          this.io.to(room.id).emit('timer_tick', {
+            playerId: activePlayer.id,
+            timeRemaining: activePlayer.timeRemaining
+          });
+        }
+      } catch (err) {
+        console.error('Error en timer de sala:', err);
+      }
+    }, 1000);
+  }
+
+  stopRoomTimer(room) {
+    if (room && room.timerInterval) {
+      clearInterval(room.timerInterval);
+      room.timerInterval = null;
+    }
+  }
+
+  handleTimeout(room, timedOutPlayer) {
+    this.stopRoomTimer(room);
+    const mins = Math.round((room.timeLimit || 900) / 60);
+    this.addLog(room, `⏱️ ¡A ${timedOutPlayer.name} se le agotó el tiempo límite (${mins} min) y ha perdido la partida!`);
+
+    if (this.io && room.id) {
+      this.io.to(room.id).emit('player_timed_out', {
+        playerId: timedOutPlayer.id,
+        playerName: timedOutPlayer.name
+      });
+    }
+
+    timedOutPlayer.timedOut = true;
+
+    // In 2-player matches, the other player wins immediately!
+    if (room.players.length === 2) {
+      const winner = room.players.find(p => p.id !== timedOutPlayer.id);
+      if (winner) {
+        room.status = 'ended';
+        room.rankings = [
+          { ...winner, score: Math.max(winner.score, 1) },
+          { ...timedOutPlayer, score: 0, timedOut: true }
+        ];
+        const finalReplay = ReplayManager.finalizeRecording(room);
+        room.lastReplayId = finalReplay ? finalReplay.id : null;
+        if (this.io && room.id) {
+          this.io.to(room.id).emit('room_updated', this.serializeRoom(room));
+        }
+        return;
+      }
+    }
+
+    // In 3+ player matches, advance to next player
+    this.finishTurn(room);
+    if (this.io && room.id) {
+      this.io.to(room.id).emit('room_updated', this.serializeRoom(room));
+    }
+  }
+
   serializeRoom(room) {
     const validPlacements = (room.status === 'playing' && room.currentTile)
       ? room.board.getValidPlacements(room.currentTile, room.autoRules && !room.sandboxMode)
@@ -1321,6 +1438,7 @@ class RoomManager {
       name: room.name,
       status: room.status,
       isLocal: !!room.isLocal,
+      timeLimit: room.timeLimit !== undefined ? room.timeLimit : 900,
       turnIndex: room.turnIndex,
       turnNumber: room.turnNumber,
       turnPhase: room.turnPhase,

@@ -1940,12 +1940,14 @@ function startLocalGame() {
   audio.playClick();
   const includeRiver = document.getElementById('local-river-checkbox') ? document.getElementById('local-river-checkbox').checked : true;
   const sandboxMode = document.getElementById('local-sandbox-checkbox') ? document.getElementById('local-sandbox-checkbox').checked : false;
+  const timeLimitSelect = document.getElementById('local-time-limit-select');
+  const timeLimit = timeLimitSelect ? parseInt(timeLimitSelect.value, 10) : 900;
 
-  console.log('[Game] Starting local game with config:', localPlayersConfig);
+  console.log('[Game] Starting local game with config:', localPlayersConfig, 'timeLimit:', timeLimit);
   socket.emit('create_local_game', {
     name: 'Partida Local (Pass & Play)',
     players: localPlayersConfig,
-    options: { includeRiver, sandboxMode }
+    options: { includeRiver, sandboxMode, timeLimit }
   });
 }
 
@@ -1963,6 +1965,8 @@ function createRoom() {
   const roomName = document.getElementById('room-name-input').value.trim() || `Reino de ${currentName}`;
   const includeRiver = document.getElementById('include-river-checkbox') ? document.getElementById('include-river-checkbox').checked : false;
   const sandboxMode = document.getElementById('sandbox-mode-checkbox') ? document.getElementById('sandbox-mode-checkbox').checked : false;
+  const timeLimitSelect = document.getElementById('time-limit-select');
+  const timeLimit = timeLimitSelect ? parseInt(timeLimitSelect.value, 10) : 900;
 
   fetch('/api/rooms/create', {
     method: 'POST',
@@ -1970,7 +1974,7 @@ function createRoom() {
     body: JSON.stringify({
       name: roomName,
       hostName: currentName,
-      options: { includeRiver, sandboxMode, avatar: currentAvatar }
+      options: { includeRiver, sandboxMode, avatar: currentAvatar, timeLimit }
     })
   })
   .then(res => res.json())
@@ -2214,6 +2218,16 @@ function renderWarRoom(room) {
   if (warRoomTitle) warRoomTitle.innerText = room.name || 'Siege of Carcassonne';
   if (warRoomCode) warRoomCode.innerText = room.id || '';
   if (warRoomPlayerCount) warRoomPlayerCount.innerText = room.players ? room.players.length : 1;
+
+  const warRoomTimerBadge = document.getElementById('war-room-timer-badge');
+  if (warRoomTimerBadge) {
+    if (room.timeLimit && room.timeLimit > 0) {
+      const mins = Math.round(room.timeLimit / 60);
+      warRoomTimerBadge.innerText = `⏱️ Tiempo: ${mins} min`;
+    } else {
+      warRoomTimerBadge.innerText = `⏳ Sin tiempo`;
+    }
+  }
 
   if (warRoomRiverBadge) {
     warRoomRiverBadge.innerText = room.includeRiver ? '🌊 Río: Sí' : '🌊 Río: No';
@@ -2470,6 +2484,42 @@ socket.on('laser_pointer_updated', (data) => {
   }
 });
 
+// Chess Clock Timer Sync Handlers
+socket.on('timer_tick', ({ playerId, timeRemaining }) => {
+  if (currentRoom && currentRoom.players) {
+    const p = currentRoom.players.find(x => x.id === playerId);
+    if (p) {
+      p.timeRemaining = timeRemaining;
+    }
+    const timerEl = document.getElementById(`player-timer-${playerId}`);
+    if (timerEl) {
+      const remaining = Math.max(0, timeRemaining);
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      timerEl.innerText = `⏱️ ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      timerEl.classList.toggle('timer-critical', remaining < 60 && remaining > 0);
+      timerEl.classList.toggle('timer-zero', remaining <= 0);
+    }
+    // If active player is currently displayed on mobile HUD, update it too
+    if (currentRoom.activePlayer && currentRoom.activePlayer.id === playerId && currentRoom.timeLimit > 0) {
+      currentRoom.activePlayer.timeRemaining = timeRemaining;
+      const hudTimer = document.getElementById('mobile-hud-timer-span');
+      if (hudTimer) {
+        const remaining = Math.max(0, timeRemaining);
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        hudTimer.innerText = `⏱️${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        hudTimer.style.color = remaining < 60 ? '#e74c3c' : 'var(--accent-gold)';
+      }
+    }
+  }
+});
+
+socket.on('player_timed_out', ({ playerId, playerName }) => {
+  audio.playScore();
+  showToast(`⏱️ ¡Tiempo agotado para ${playerName || 'el comandante'}! Ha perdido la partida por tiempo.`, 'warning');
+});
+
 // Rematch Socket Handlers
 socket.on('rematch_requested', ({ requesterName }) => {
   audio.playScore();
@@ -2560,11 +2610,18 @@ function updateUI(room) {
     const pAvatar = window.profileManager ? window.profileManager.getAvatar(room.activePlayer.avatar) : { icon: '👤' };
     const pMeeples = room.activePlayer.meeples !== undefined ? room.activePlayer.meeples : 7;
     const pScore = room.activePlayer.score || 0;
+    const timeRem = room.activePlayer.timeRemaining;
+    const hasTime = timeRem !== undefined && room.timeLimit > 0;
+    const mins = hasTime ? Math.floor(Math.max(0, timeRem) / 60) : 0;
+    const secs = hasTime ? (Math.max(0, timeRem) % 60) : 0;
+    const timeStr = hasTime ? `⏱️${mins}:${secs < 10 ? '0' : ''}${secs}` : '';
+
     mobileHudPlayer.innerHTML = `
       <span>${room.activePlayer.isBot ? '🤖' : pAvatar.icon}</span>
       <span style="color:var(--color-${room.activePlayer.color}); font-weight:800;">${escapeHtml(room.activePlayer.name)}</span>
       <span style="color:var(--primary); font-size:0.75rem;">⭐${pScore}</span>
       <span style="color:var(--secondary); font-size:0.75rem;">👤x${pMeeples}</span>
+      ${hasTime ? `<span id="mobile-hud-timer-span" style="color:${timeRem < 60 ? '#e74c3c' : 'var(--accent-gold)'}; font-size:0.75rem; font-family:monospace; font-weight:700;">${timeStr}</span>` : ''}
       ${isMe ? '<span style="color:#2ecc71; font-size:0.72rem; font-weight:800;">(TÚ)</span>' : ''}
     `;
   }
@@ -2903,6 +2960,18 @@ function renderPlayers(room) {
     const isOnline = room.isLocal || p.isBot || p.connected !== false;
     const div = document.createElement('div');
     div.className = `player-card ${isActive ? 'active-turn' : ''} ${isIdle ? 'player-idle' : ''}`;
+
+    let timerBadgeHtml = '';
+    if (p.timeRemaining !== undefined && (room.timeLimit > 0 || p.timeRemaining > 0)) {
+      const remaining = Math.max(0, p.timeRemaining);
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      const timeFormatted = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      const isCritical = remaining < 60 && remaining > 0;
+      const isZero = remaining <= 0;
+      timerBadgeHtml = `<div class="stat-badge timer-badge ${isActive ? 'active-timer' : ''} ${isCritical ? 'timer-critical' : ''} ${isZero ? 'timer-zero' : ''}" id="player-timer-${p.id}">⏱️ ${timeFormatted}</div>`;
+    }
+
     div.innerHTML = `
       <div class="player-avatar-wrap">
         <span class="online-status-dot ${isOnline ? 'online' : 'offline'}" title="${isOnline ? 'En línea en la partida' : 'Desconectado'}"></span>
@@ -2914,6 +2983,7 @@ function renderPlayers(room) {
       <div class="player-stats">
         <div class="stat-badge score-badge">⭐ ${p.score} pts</div>
         <div class="stat-badge meeple-badge">👤 x${p.meeples}</div>
+        ${timerBadgeHtml}
         ${room.sandboxMode ? `
           <div class="sandbox-player-actions">
             <button class="btn btn-xs" onclick="adjustPlayerScore('${p.id}', 1)">+1</button>
