@@ -29,3 +29,4 @@ data/saves/*.json
 !data/saves/.gitkeep
 data/replays/*.json
 !data/replays/.gitkeep
+data/ai_config.json

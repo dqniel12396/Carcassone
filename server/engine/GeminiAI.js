@@ -18,9 +18,9 @@ class GeminiAI {
       console.error('⚠️ Error leyendo ai_config.json:', e);
     }
     const defaultCfg = {
-      apiKey: process.env.GEMINI_API_KEY || 'AQ.Ab8RN6KvxLxow4_-Fz8HUrEEfkAtK3xZ6XRlE2d4tiZDPjU1tw',
-      model: 'gemini-3.6-flash',
-      enabled: true,
+      apiKey: process.env.GEMINI_API_KEY || '',
+      model: 'gemini-2.5-flash',
+      enabled: false,
       botBanterEnabled: true
     };
     try {
