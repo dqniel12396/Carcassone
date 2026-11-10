@@ -527,6 +527,25 @@ io.on('connection', (socket) => {
   let currentRoomId = null;
   let currentPlayerId = null;
 
+  // Global crash shield for all socket event handlers on this connection
+  const originalOn = socket.on.bind(socket);
+  socket.on = function(event, listener) {
+    return originalOn(event, function(...args) {
+      try {
+        const ret = listener.apply(this, args);
+        if (ret && typeof ret.catch === 'function') {
+          ret.catch(err => {
+            console.error(`⚠️ Error asíncrono en evento socket [${event}]:`, err);
+            socket.emit('error_msg', 'Ocurrió un error inesperado al procesar la acción.');
+          });
+        }
+      } catch (err) {
+        console.error(`⚠️ Error síncrono en evento socket [${event}]:`, err);
+        socket.emit('error_msg', 'Ocurrió un error inesperado al procesar la acción.');
+      }
+    });
+  };
+
 
   socket.on('join_room', ({ roomId, playerId, playerName, preferredColor, avatar }) => {
     currentRoomId = roomId;
@@ -651,6 +670,9 @@ io.on('connection', (socket) => {
     const res = roomManager.deleteRoom(roomId, effectivePlayerId, playerName);
     if (res.error) {
       socket.emit('error_msg', res.error);
+    } else {
+      socket.emit('room_deleted_success', { roomId });
+      io.emit('rooms_list', roomManager.listRooms());
     }
   });
 
@@ -949,9 +971,11 @@ io.on('connection', (socket) => {
       socket.emit('error_msg', res.error);
     } else {
       currentRoomId = res.room.id;
+      currentPlayerId = res.room.players[0]?.id || socket.id;
       socket.join(res.room.id);
       socket.emit('room_joined', { room: res.room, player: res.room.players[0] || null });
       io.to(res.room.id).emit('room_updated', res.room);
+      io.emit('rooms_list', roomManager.listRooms());
     }
   });
 
@@ -974,6 +998,18 @@ io.on('connection', (socket) => {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
     io.to(currentRoomId).emit('new_chat', msg);
+  });
+
+  socket.on('leave_room', () => {
+    if (currentRoomId && currentPlayerId) {
+      socket.leave(currentRoomId);
+      roomManager.leaveRoom(currentRoomId, currentPlayerId);
+      const room = roomManager.getRoom(currentRoomId);
+      if (room) {
+        io.to(currentRoomId).emit('room_updated', roomManager.serializeRoom(room));
+      }
+      currentRoomId = null;
+    }
   });
 
   socket.on('disconnect', () => {

@@ -39,7 +39,8 @@ class Rules {
         const y = cy + dy;
         const tile = this.board.getTile(x, y);
 
-        if (tile && tile.tile.monastery && tile.meeple && (tile.meeple.segmentId.startsWith('monastery') || tile.meeple.type === 'monastery')) {
+        const mSegId = String((tile && tile.meeple && tile.meeple.segmentId) || '');
+        if (tile && tile.tile.monastery && tile.meeple && (mSegId.startsWith('monastery') || tile.meeple.type === 'monastery')) {
           let complete = true;
           for (let nx = -1; nx <= 1; nx++) {
             for (let ny = -1; ny <= 1; ny++) {

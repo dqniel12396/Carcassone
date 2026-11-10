@@ -206,13 +206,15 @@ class UserManager {
   }
 
   ensureDefaultAdmin() {
-    // Check if any admin exists and grant admin to admin/dan accounts
+    // Check if any admin exists and grant admin to admin account
     let hasAdmin = false;
     for (const u of this.users.values()) {
       const norm = (u.username || '').toLowerCase();
-      if (u.role === 'admin' || norm === 'admin' || norm.includes('dan') || norm === 'dqniel') {
+      if (norm === 'admin') {
         u.role = 'admin';
         u.title = 'Soberano Supremo del Reino';
+        hasAdmin = true;
+      } else if (u.role === 'admin') {
         hasAdmin = true;
       }
     }
@@ -379,6 +381,17 @@ class UserManager {
   getUser(userId) {
     const user = this.users.get(userId);
     return user ? this.sanitizeUser(user) : null;
+  }
+
+  getUserByUsername(username) {
+    if (!username) return null;
+    const norm = String(username).trim().toLowerCase();
+    for (const u of this.users.values()) {
+      if ((u.username && u.username.toLowerCase() === norm) || (u.displayName && u.displayName.toLowerCase() === norm)) {
+        return this.sanitizeUser(u);
+      }
+    }
+    return null;
   }
 
   updateProfile(userId, { avatar, color, title, displayName, name }) {

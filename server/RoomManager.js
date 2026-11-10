@@ -7,6 +7,7 @@ const BoardGraph = require('./engine/BoardGraph');
 const BotEngine = require('./engine/BotEngine');
 const ReplayManager = require('./engine/ReplayManager');
 const GeminiAI = require('./engine/GeminiAI');
+const UserManager = require('./engine/UserManager');
 
 const SAVES_DIR = path.join(__dirname, '..', 'data', 'saves');
 const REPLAYS_DIR = path.join(__dirname, '..', 'data', 'replays');
@@ -104,7 +105,7 @@ class RoomManager {
       passCode: passCode || '',
       createdAt: Date.now(),
       status: 'lobby', // 'lobby' | 'playing' | 'ended'
-      isLocal: !!options.isLocal,
+      isLocal: !!options.isLocal || String(name || '').toLowerCase().includes('local'),
       saveFileName: options.saveFileName || null,
       timeLimit: timeLimitSecs,
       timerInterval: null,
@@ -116,6 +117,7 @@ class RoomManager {
       currentRotation: 0,
       turnPhase: 'place_tile', // 'place_tile' | 'place_meeple'
       lastPlacedPos: null,
+      lastConfirmedPos: null,
       sandboxMode: !!options.sandboxMode,
       autoRules: options.autoRules !== false,
       includeRiver: !!options.includeRiver,
@@ -141,7 +143,7 @@ class RoomManager {
   listRooms() {
     this.cleanupStaleRooms();
     return Array.from(this.rooms.values())
-      .filter(r => !r.isLocal && r.status !== 'ended')
+      .filter(r => !r.isLocal && !String(r.name || '').toLowerCase().includes('local') && r.status !== 'ended')
       .map(r => ({
         id: r.id,
         name: r.name,
@@ -167,18 +169,68 @@ class RoomManager {
     const room = this.getRoom(roomId);
     if (!room) return { error: 'Sala no encontrada' };
 
+    const norm = (s) => String(s || '').trim().toLowerCase();
+    const reqName = norm(playerName);
+
+    // 1. Match by exact playerId
     let player = room.players.find(p => p.id === playerId);
-    if (!player && room.isLocal) {
+
+    // 2. If not found by playerId, match by playerName to reconnect existing player slot
+    if (!player && reqName) {
+      player = room.players.find(p => !p.isBot && (
+        norm(p.name) === reqName ||
+        (reqName === 'dqniel' && norm(p.name) === 'daniel') ||
+        (reqName === 'daniel' && norm(p.name) === 'dqniel')
+      ));
+      if (player) {
+        // Rebind player slot to the current session socket/playerId
+        player.id = playerId;
+      }
+    }
+
+    // 3. Local game single-device reconnect
+    const isLocalGame = room.isLocal || String(room.name || '').toLowerCase().includes('local');
+    if (!player && isLocalGame) {
       player = room.players.find(p => !p.isBot) || room.players[0];
       if (player) {
+        player.id = playerId;
         player.connected = true;
         this.addLog(room, `⚡ Reconectado a la partida local.`);
         return { room: this.serializeRoom(room), player };
       }
     }
+
+    // 4. Admin or Host reconnect
+    const isAdmin = playerId === 'admin' || playerId === 'usr_admin_master' ||
+      reqName === 'admin' || reqName === 'dqniel' ||
+      UserManager.getUser(playerId)?.role === 'admin' ||
+      UserManager.getUserByUsername(reqName)?.role === 'admin';
+
+    if (!player && (isAdmin || room.hostName === playerName || norm(room.hostName) === reqName)) {
+      const targetPlayer = room.players.find(p => !p.isBot && p.connected === false) || room.players[0];
+      if (targetPlayer) {
+        targetPlayer.id = playerId;
+        targetPlayer.connected = true;
+        this.addLog(room, `👑 ${isAdmin ? 'Administrador' : 'Anfitrión'} reconectado como ${targetPlayer.name}.`);
+        return { room: this.serializeRoom(room), player: targetPlayer };
+      } else if (room.players.length > 0) {
+        return { room: this.serializeRoom(room), player: room.players[0] };
+      }
+    }
+
+    // 5. If game has already started (playing or ended), non-participants are strictly blocked from joining
+    if (!player && room.status !== 'lobby') {
+      return { error: 'La partida ya comenzó. Un jugador que no formaba parte de la sala al empezar no puede unirse a la partida.' };
+    }
+
     if (!player) {
       if (room.players.length >= 6) {
         return { error: 'La sala está llena (máximo 6 jugadores)' };
+      }
+
+      // In lobby, disallow duplicate player names
+      if (reqName && room.players.some(p => norm(p.name) === reqName)) {
+        return { error: `Ya existe un jugador con el nombre "${playerName}" en esta sala.` };
       }
 
       const usedColors = room.players.map(p => p.color);
@@ -436,10 +488,16 @@ class RoomManager {
       room.players.some(p => norm(p.name) === reqName && p.isHost) ||
       (room.players[0] && norm(room.players[0].name) === reqName)
     );
-    const isOwner = isOwnerById || isOwnerByName || (room.players.length === 0) || hostId === 'admin';
+    const isAdmin = hostId === 'admin' || hostId === 'usr_admin_master' ||
+      reqName === 'admin' || reqName === 'gran rey administrador' ||
+      UserManager.getUser(hostId)?.role === 'admin' ||
+      UserManager.getUserByUsername(reqName)?.role === 'admin' ||
+      UserManager.getUserByUsername(hostId)?.role === 'admin';
+    const isAbandoned = room.players.length === 0 || room.players.every(p => p.connected === false);
+    const isOwner = isOwnerById || isOwnerByName || isAbandoned || isAdmin;
 
     if (!isOwner) {
-      return { error: 'Solo el anfitrión puede eliminar la sala' };
+      return { error: 'Solo el anfitrión o el Administrador pueden eliminar la sala' };
     }
 
     this.rooms.delete(roomId);
@@ -683,8 +741,8 @@ class RoomManager {
       if (occCheck.occupied) {
         friendlyError = occCheck.error || 'Estructura ya ocupada';
         (room.players || []).forEach(p => {
-          if (p && p.id && p.name) {
-            friendlyError = friendlyError.replace(new RegExp(p.id, 'g'), p.name);
+          if (p && p.id && p.name && friendlyError) {
+            friendlyError = friendlyError.split(p.id).join(p.name);
           }
         });
       }
@@ -849,6 +907,20 @@ class RoomManager {
     finalRes.scoredFeatures.forEach(feat => {
       ReplayManager.recordFeatureScored(room.id, feat);
       this.addLog(room, `[Puntuación Final] ${feat.name}: +${feat.points} pts.`);
+
+      if (feat.meeplesToReturn && feat.meeplesToReturn.length > 0) {
+        feat.meeplesToReturn.forEach(m => {
+          const p = room.players.find(x => x.id === m.player);
+          ReplayManager.recordAction(room.id, p || forfeitingPlayer, 'remove_meeple', {
+            x: m.x,
+            y: m.y,
+            reason: 'final_scoring',
+            featureName: feat.name,
+            points: feat.points,
+            turnNumber: room.turnNumber
+          }, this._buildReplayContext(room, p || forfeitingPlayer, null));
+        });
+      }
     });
     Object.entries(finalRes.totalPointsByPlayer).forEach(([pid, pts]) => {
       const p = room.players.find(x => x.id === pid);
@@ -904,6 +976,12 @@ class RoomManager {
       if (placedTile && placedTile.meeple && placedTile.meeple.player === activePlayer.id) {
         room.board.removeMeeple(room.lastPlacedPos.x, room.lastPlacedPos.y);
         activePlayer.meeples = Math.min(7, activePlayer.meeples + 1);
+        ReplayManager.recordAction(room.id, activePlayer, 'remove_meeple', {
+          x: room.lastPlacedPos.x,
+          y: room.lastPlacedPos.y,
+          reason: 'pass_meeple',
+          turnNumber: room.turnNumber
+        }, this._buildReplayContext(room, activePlayer, null));
       }
     }
 
@@ -937,12 +1015,25 @@ class RoomManager {
           feat.meeplesToReturn.forEach(m => {
             const p = room.players.find(x => x.id === m.player);
             if (p) p.meeples = Math.min(7, p.meeples + 1);
+
+            // Record meeple removal/return in replay
+            ReplayManager.recordAction(room.id, p || activePlayer, 'remove_meeple', {
+              x: m.x,
+              y: m.y,
+              reason: 'feature_scored',
+              featureName: feat.name,
+              points: feat.points,
+              turnNumber: room.turnNumber
+            }, this._buildReplayContext(room, p || activePlayer, null));
           });
         });
       }
     }
 
     // 2. Advance turn
+    if (room.lastPlacedPos) {
+      room.lastConfirmedPos = { x: room.lastPlacedPos.x, y: room.lastPlacedPos.y, timestamp: Date.now() };
+    }
     room.lastPlacedPos = null;
     room.turnPhase = 'place_tile';
     room.currentRotation = 0;
@@ -958,6 +1049,20 @@ class RoomManager {
       finalRes.scoredFeatures.forEach(feat => {
         ReplayManager.recordFeatureScored(room.id, feat);
         this.addLog(room, `[Puntuación Final] ${feat.name}: +${feat.points} pts.`);
+
+        if (feat.meeplesToReturn && feat.meeplesToReturn.length > 0) {
+          feat.meeplesToReturn.forEach(m => {
+            const p = room.players.find(x => x.id === m.player);
+            ReplayManager.recordAction(room.id, p || activePlayer, 'remove_meeple', {
+              x: m.x,
+              y: m.y,
+              reason: 'final_scoring',
+              featureName: feat.name,
+              points: feat.points,
+              turnNumber: room.turnNumber
+            }, this._buildReplayContext(room, p || activePlayer, null));
+          });
+        }
       });
       Object.entries(finalRes.totalPointsByPlayer).forEach(([pid, pts]) => {
         const p = room.players.find(x => x.id === pid);
@@ -1114,6 +1219,9 @@ class RoomManager {
     const saveData = {
       id: room.id,
       name: room.name,
+      hostName: room.hostName,
+      hostAvatar: room.hostAvatar,
+      isLocal: !!room.isLocal || String(room.name || '').toLowerCase().includes('local'),
       saveFileName: safeName,
       savedAt: new Date().toISOString(),
       status: room.status,
@@ -1160,15 +1268,21 @@ class RoomManager {
       }
     }
 
+    const isLocal = !!saveData.isLocal || String(saveData.name || '').toLowerCase().includes('local');
     const room = this.createRoom({
       name: saveData.name || 'Partida Cargada',
+      hostName: saveData.hostName || 'Noble',
       options: {
         sandboxMode: saveData.sandboxMode,
         autoRules: saveData.autoRules,
         includeRiver: saveData.includeRiver,
+        isLocal: isLocal,
+        avatar: saveData.hostAvatar,
         saveFileName: baseSaveName
       }
     });
+
+    room.isLocal = isLocal;
 
     room.saveFileName = baseSaveName;
     room.status = saveData.status;
@@ -1399,8 +1513,8 @@ class RoomManager {
           if (occCheck.occupied) {
             friendlyError = occCheck.error || 'Estructura ya ocupada';
             (room.players || []).forEach(p => {
-              if (p && p.id && p.name) {
-                friendlyError = friendlyError.replace(new RegExp(p.id, 'g'), p.name);
+              if (p && p.id && p.name && friendlyError) {
+                friendlyError = friendlyError.split(p.id).join(p.name);
               }
             });
           }
@@ -1443,6 +1557,7 @@ class RoomManager {
       turnNumber: room.turnNumber,
       turnPhase: room.turnPhase,
       lastPlacedPos: room.lastPlacedPos,
+      lastConfirmedPos: room.lastConfirmedPos || null,
       activePlayer: room.players[room.turnIndex] || null,
       players: room.players,
       playerColors,

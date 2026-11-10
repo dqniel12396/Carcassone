@@ -75,10 +75,6 @@ class BoardGraph {
       const tileObj = this.board.getTile(curr.x, curr.y);
       if (!tileObj) continue;
 
-      if (tileObj.tile.shield && featureType === 'city') {
-        shields++;
-      }
-
       // Collect meeple on this segment
       if (tileObj.meeple && tileObj.meeple.segmentId === curr.segId) {
         meeples.push({ ...tileObj.meeple, x: curr.x, y: curr.y });
@@ -126,6 +122,17 @@ class BoardGraph {
               }
             }
           }
+        }
+      }
+    }
+
+    // Calculate shields uniquely per distinct tile in the city feature
+    if (featureType === 'city') {
+      for (const tCoord of tiles) {
+        const [tx, ty] = tCoord.split(',').map(Number);
+        const tObj = this.board.getTile(tx, ty);
+        if (tObj && tObj.tile && tObj.tile.shield) {
+          shields++;
         }
       }
     }

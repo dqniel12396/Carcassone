@@ -163,6 +163,8 @@ window.closeTilesGuideModal = closeTilesGuideModal;
 window.toggleTilesGuideModal = toggleTilesGuideModal;
 
 // Laser Pointer Control
+let laserLeaveTimeout = null;
+
 function toggleLaserPointer(forceState) {
   if (!boardRenderer) return;
   const newState = (forceState !== undefined) ? forceState : !boardRenderer.laserMode;
@@ -198,6 +200,10 @@ function toggleLaserPointer(forceState) {
       'info'
     );
   } else {
+    if (laserLeaveTimeout) {
+      clearTimeout(laserLeaveTimeout);
+      laserLeaveTimeout = null;
+    }
     boardRenderer.removeLaser(myPlayerId);
     if (currentRoom) {
       socket.emit('laser_pointer_move', {
@@ -233,8 +239,19 @@ window.addEventListener('DOMContentLoaded', () => {
     onCancelPlacement: () => cancelTilePlacement(),
     onPendingStateChange: (state) => updatePendingTileUI(state),
     onLaserMove: (worldX, worldY) => {
-      const myColor = colorSelect?.value || window.profileManager?.profile?.color || 'yellow';
-      const myName = getProfileName();
+      if (laserLeaveTimeout) {
+        clearTimeout(laserLeaveTimeout);
+        laserLeaveTimeout = null;
+      }
+      let myColor = colorSelect?.value || window.profileManager?.profile?.color || 'red';
+      let myName = getProfileName();
+      if (currentRoom && currentRoom.isLocal && currentRoom.gameState && currentRoom.gameState.players) {
+        const activeP = currentRoom.gameState.players[currentRoom.gameState.currentTurnIndex];
+        if (activeP) {
+          myName = activeP.name;
+          myColor = activeP.color || 'red';
+        }
+      }
       boardRenderer.setLaser(myPlayerId, {
         playerName: myName,
         playerColor: myColor,
@@ -255,18 +272,23 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     },
     onLaserLeave: () => {
-      boardRenderer.removeLaser(myPlayerId);
-      if (currentRoom) {
-        socket.emit('laser_pointer_move', {
-          roomId: currentRoom.id,
-          playerId: myPlayerId,
-          active: false
-        });
-      }
+      if (laserLeaveTimeout) clearTimeout(laserLeaveTimeout);
+      laserLeaveTimeout = setTimeout(() => {
+        boardRenderer.removeLaser(myPlayerId);
+        if (currentRoom) {
+          socket.emit('laser_pointer_move', {
+            roomId: currentRoom.id,
+            playerId: myPlayerId,
+            active: false
+          });
+        }
+        laserLeaveTimeout = null;
+      }, 1200);
     }
   });
 
   initEventListeners();
+  initNavigationHistory();
   loadRooms();
   loadSaves();
 });
@@ -1719,11 +1741,14 @@ function renderRoomsList(rooms) {
     return;
   }
 
-  // Deduplicate by ID
+  // Deduplicate by ID and filter out private local games
   const uniqueRooms = [];
   const seenIds = new Set();
   for (const r of rooms) {
     if (r && r.id && !seenIds.has(r.id)) {
+      if (r.isLocal || String(r.name || '').toLowerCase().includes('local')) {
+        continue;
+      }
       seenIds.add(r.id);
       uniqueRooms.push(r);
     }
@@ -1744,11 +1769,34 @@ function renderRoomsList(rooms) {
     }).join('');
 
     const norm = s => String(s || '').trim().toLowerCase();
-    const isMyRoom = myNormName && (
+    const isAdmin = window.profileManager ? window.profileManager.isAdmin() : false;
+    const isAbandoned = !r.players || r.players.length === 0 || r.players.every(p => p.connected === false);
+    const isLocalRoom = !!r.isLocal || String(r.name || '').toLowerCase().includes('local');
+    const isMyRoom = isAdmin || isAbandoned || (myNormName && (
       norm(r.hostName) === myNormName ||
       (r.players && r.players.some(p => norm(p.name) === myNormName && p.isHost)) ||
       (r.players && r.players[0] && norm(r.players[0].name) === myNormName)
-    );
+    ));
+
+    const isParticipant = (r.players || []).some(p => {
+      const pName = norm(p.name);
+      return pName === myNormName ||
+        (myNormName === 'dqniel' && pName === 'daniel') ||
+        (myNormName === 'daniel' && pName === 'dqniel') ||
+        (isAdmin && !p.isBot);
+    });
+    const isPlaying = r.status === 'playing';
+
+    let joinBtnHtml = '';
+    if (isLocalRoom) {
+      joinBtnHtml = `<button class="btn btn-sm btn-primary" onclick="joinRoom('${r.id}')" title="Reanudar tu partida local">🎮 Reanudar</button>`;
+    } else if (isPlaying && (isParticipant || isMyRoom || isAdmin)) {
+      joinBtnHtml = `<button class="btn btn-sm btn-success" onclick="joinRoom('${r.id}')" title="Reconectarte a tu partida en curso" style="background:linear-gradient(135deg, #27ae60, #1e8449); border-color:#2ecc71;">⚡ Reconectar</button>`;
+    } else if (isPlaying && !isParticipant && !isAdmin) {
+      joinBtnHtml = `<button class="btn btn-sm disabled" style="opacity:0.6; cursor:not-allowed; background:var(--surface-container); border:1px solid var(--border-iron); color:var(--text-muted);" title="Partida en curso: No se admiten nuevos participantes" disabled>🚫 En partida</button>`;
+    } else {
+      joinBtnHtml = `<button class="btn btn-sm btn-primary" onclick="joinRoom('${r.id}')">Unirse</button>`;
+    }
 
     div.innerHTML = `
       <div class="room-info">
@@ -1763,8 +1811,8 @@ function renderRoomsList(rooms) {
         <span class="room-meta">${r.playerCount}/6 Jugadores • ${r.status === 'playing' ? '⚔️ En partida' : '⏳ En espera'} ${r.includeRiver ? '• 🌊 Con Río' : ''}</span>
       </div>
       <div style="display:flex; gap:6px; align-items:center;">
-        <button class="btn btn-sm btn-primary" onclick="joinRoom('${r.id}')">Unirse</button>
-        ${isMyRoom ? `<button class="btn btn-sm btn-danger" onclick="deleteRoomDirect('${r.id}')" title="Eliminar sala">🗑️</button>` : ''}
+        ${joinBtnHtml}
+        ${(isMyRoom || isAdmin) ? `<button class="btn btn-sm btn-danger" onclick="deleteRoomDirect('${r.id}')" title="Eliminar sala">🗑️</button>` : ''}
       </div>
     `;
     roomsList.appendChild(div);
@@ -1782,14 +1830,16 @@ async function deleteRoomDirect(roomId) {
   if (ok) {
     audio.playClick();
     const myProfileName = (window.profileManager ? window.profileManager.getName() : (playerNameInput ? playerNameInput.value.trim() : null)) || myPlayerName;
+    const effectivePlayerId = window.profileManager?.currentUser?.id || myPlayerId;
     socket.emit('delete_room_by_id', { 
       roomId, 
-      playerId: myPlayerId, 
+      playerId: effectivePlayerId, 
       playerName: myProfileName 
     });
-    setTimeout(() => loadRooms(), 250);
+    setTimeout(() => loadRooms(), 300);
   }
 }
+window.deleteRoomDirect = deleteRoomDirect;
 
 function renderSavesList(saves) {
   savesList.innerHTML = '';
@@ -1944,6 +1994,9 @@ function startLocalGame() {
   const timeLimit = timeLimitSelect ? parseInt(timeLimitSelect.value, 10) : 900;
 
   console.log('[Game] Starting local game with config:', localPlayersConfig, 'timeLimit:', timeLimit);
+  if (history.state?.view !== 'game') {
+    history.pushState({ view: 'game', isLocal: true }, '', '#partida');
+  }
   socket.emit('create_local_game', {
     name: 'Partida Local (Pass & Play)',
     players: localPlayersConfig,
@@ -2028,6 +2081,7 @@ async function deleteSavedGame(saveName) {
       });
   }
 }
+window.deleteSavedGame = deleteSavedGame;
 
 async function promptSaveGame() {
   const defaultName = currentRoom?.saveFileName || 
@@ -2051,6 +2105,28 @@ function startGame() {
   socket.emit('start_game');
 }
 
+function exitToLobby() {
+  sessionStorage.removeItem('carcassonne_active_room_id');
+  if (currentRoom && socket) {
+    socket.emit('leave_room', { roomId: currentRoom.id, playerId: myPlayerId });
+  }
+  currentRoom = null;
+  const victoryModal = document.getElementById('victory-modal');
+  if (victoryModal) {
+    victoryModal.style.display = 'none';
+    delete victoryModal.dataset.shownForRoom;
+    delete victoryModal.dataset.manuallyClosed;
+  }
+  if (gameView) gameView.style.display = 'none';
+  if (warRoomView) warRoomView.style.display = 'none';
+  if (lobbyView) lobbyView.style.display = 'flex';
+  if (window.location.hash) {
+    history.replaceState({ view: 'lobby' }, '', window.location.pathname);
+  }
+  loadRooms();
+}
+window.exitToLobby = exitToLobby;
+
 async function leaveRoom() {
   const ok = await showMedievalConfirm({
     title: '¿Abandonar la Batalla?',
@@ -2061,16 +2137,84 @@ async function leaveRoom() {
     confirmClass: 'btn-danger'
   });
   if (ok) {
-    sessionStorage.removeItem('carcassonne_active_room_id');
-    currentRoom = null;
-    const victoryModal = document.getElementById('victory-modal');
-    if (victoryModal) {
-      victoryModal.style.display = 'none';
-      delete victoryModal.dataset.shownForRoom;
-      delete victoryModal.dataset.manuallyClosed;
-    }
-    window.location.reload();
+    exitToLobby();
   }
+}
+
+function initNavigationHistory() {
+  // Set initial history state on lobby load
+  if (!history.state || !history.state.view) {
+    history.replaceState({ view: 'lobby' }, '', window.location.pathname);
+  }
+
+  window.addEventListener('popstate', async (e) => {
+    // 1. If any modal overlay is visible, close it first without navigating away
+    const modals = [
+      document.getElementById('replay-movie-modal'),
+      document.getElementById('replay-modal'),
+      document.getElementById('tiles-guide-modal'),
+      document.getElementById('shortcuts-modal'),
+      document.getElementById('profile-modal'),
+      document.getElementById('auth-modal'),
+      document.getElementById('admin-panel-modal'),
+      document.getElementById('add-bot-modal'),
+      document.getElementById('tile-editor-modal'),
+      document.getElementById('medieval-dialog-modal')
+    ];
+    let closedAnyModal = false;
+    for (const m of modals) {
+      if (m && m.style.display && m.style.display !== 'none') {
+        m.style.display = 'none';
+        closedAnyModal = true;
+        if (m.id === 'replay-movie-modal') {
+          pauseReplayMovie();
+        }
+      }
+    }
+    if (closedAnyModal) {
+      return;
+    }
+
+    // 2. If mobile drawer or sidebar is open, close it
+    if (sidePanel && sidePanel.classList.contains('open')) {
+      sidePanel.classList.remove('open');
+      if (drawerBackdrop) drawerBackdrop.classList.remove('active');
+      return;
+    }
+    if (chatDrawer && chatDrawer.classList.contains('open') && window.innerWidth <= 1024) {
+      chatDrawer.classList.remove('open');
+      if (drawerBackdrop) drawerBackdrop.classList.remove('active');
+      return;
+    }
+
+    // 3. If in a match or pre-game war room, navigate back to main lobby within interface
+    if (currentRoom) {
+      if (currentRoom.status === 'playing' && !currentRoom.isLocal) {
+        const ok = await showMedievalConfirm({
+          title: '¿Salir al Menú Principal?',
+          message: '¿Deseas salir de la partida en curso y volver al vestíbulo principal?',
+          icon: '🚪',
+          confirmText: '🚪 Salir al Vestíbulo',
+          cancelText: 'Continuar Jugando',
+          confirmClass: 'btn-danger'
+        });
+        if (ok) {
+          exitToLobby();
+        } else {
+          // Re-push history entry so the user stays in the room
+          history.pushState({ view: 'game', roomId: currentRoom.id }, '', '#partida');
+        }
+      } else {
+        // Pre-game lobby, local pass & play, or completed game: smoothly exit to lobby
+        exitToLobby();
+      }
+    } else {
+      // In main lobby: ensure lobby view is visible
+      if (gameView) gameView.style.display = 'none';
+      if (warRoomView) warRoomView.style.display = 'none';
+      if (lobbyView) lobbyView.style.display = 'flex';
+    }
+  });
 }
 
 function sendChat() {
@@ -2373,6 +2517,9 @@ socket.on('room_joined', ({ room, player }) => {
   console.log(`[Carcassonne:Sync] Successfully joined room: ${room.id} (Status: ${room.status}, TurnIndex: ${room.turnIndex})`);
   currentRoom = room;
   sessionStorage.setItem('carcassonne_active_room_id', room.id);
+  if (history.state?.view !== 'game' && history.state?.view !== 'room') {
+    history.pushState({ view: 'room', roomId: room.id }, '', '#partida');
+  }
   requestNotificationPermission();
   updateUI(room);
 });
@@ -2482,6 +2629,16 @@ socket.on('laser_pointer_updated', (data) => {
   if (boardRenderer && data) {
     boardRenderer.setLaser(data.playerId, data);
   }
+});
+
+// Room & Save Deletion Real-time Handlers
+socket.on('room_deleted_success', () => {
+  showToast('Sala eliminada correctamente del reino.', 'info');
+  loadRooms();
+});
+
+socket.on('save_deleted', () => {
+  loadSaves();
 });
 
 // Chess Clock Timer Sync Handlers
@@ -2938,6 +3095,7 @@ function updateUI(room) {
     currentRotation: room.currentRotation,
     turnPhase: room.turnPhase,
     lastPlacedPos: room.lastPlacedPos,
+    lastConfirmedPos: room.lastConfirmedPos,
     segments: currentSegments,
     activePlayerColor: (room.isLocal && activePlayer) ? activePlayer.color : (myPlayer ? myPlayer.color : 'red'),
     isMyTurn: isMyTurn || room.sandboxMode,
@@ -3471,6 +3629,8 @@ function openReplayMovie(replayId) {
           onPendingStateChange: () => {}
         });
       }
+      replayMovieState.renderer.preloadMeeples();
+      replayMovieState.renderer.preloadTileDeck();
 
       // Filter valid replay step actions
       const actions = (replay.actions || []).filter(a => a && (a.type === 'start_tile' || a.type === 'place_tile' || a.type === 'place_meeple' || a.type === 'remove_meeple' || a.type === 'pass_meeple' || a.type === 'feature_scored'));
@@ -3656,13 +3816,16 @@ function renderReplayMovieStep(stepIndex) {
     tiles: Array.from(tilesMap.values())
   };
 
+  const actionPos = currentAction?.details && currentAction.details.x !== undefined ? { x: currentAction.details.x, y: currentAction.details.y } : null;
+
   replayMovieState.renderer.updateState({
     board,
     validPlacements: [],
     currentTile: null,
     currentRotation: 0,
     turnPhase: 'ended',
-    lastPlacedPos: currentAction?.details ? { x: currentAction.details.x, y: currentAction.details.y } : null,
+    lastPlacedPos: actionPos,
+    lastConfirmedPos: actionPos ? { ...actionPos, timestamp: Date.now() } : null,
     segments: [],
     isMyTurn: false
   });
@@ -3685,8 +3848,16 @@ function renderReplayMovieStep(stepIndex) {
       let text = '';
       if (currentAction.type === 'start_tile') text = `Loseta de inicio colocada en (0, 0)`;
       else if (currentAction.type === 'place_tile') text = `Colocó loseta en (${currentAction.details.x}, ${currentAction.details.y}) a ${currentAction.details.rotation}°`;
-      else if (currentAction.type === 'place_meeple') text = `Ubicó un seguidor (${currentAction.details.segmentType || 'Estructura'})`;
-      else if (currentAction.type === 'remove_meeple') text = `Deshizo la colocación de seguidor`;
+      else if (currentAction.type === 'place_meeple') text = `Ubicó un seguidor (${currentAction.details.segmentType || 'Estructura'}) en (${currentAction.details.x}, ${currentAction.details.y})`;
+      else if (currentAction.type === 'remove_meeple') {
+        if (currentAction.details.reason === 'feature_scored') {
+          text = `Recuperó seguidor tras completar ${currentAction.details.featureName || 'estructura'} (+${currentAction.details.points || 0} pts)`;
+        } else if (currentAction.details.reason === 'final_scoring') {
+          text = `Recuperó seguidor en recuento final (${currentAction.details.featureName || 'estructura'})`;
+        } else {
+          text = `Retiró seguidor de (${currentAction.details.x}, ${currentAction.details.y})`;
+        }
+      }
       else if (currentAction.type === 'pass_meeple') text = `Pasó turno sin colocar seguidor`;
       else if (currentAction.type === 'feature_scored') text = `¡Estructura completada! Puntos otorgados.`;
       else text = currentAction.type;

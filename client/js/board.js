@@ -1,7 +1,7 @@
 // Interactive Board Renderer (HTML5 Canvas + Touch-First Gesture Engine + BGA In-Place Rotation + Mobile Action Bar Integration)
 
 class BoardRenderer {
-  constructor(canvas, { onSlotClick, onTileClick, onMeeplePointClick, onConfirmPendingTile, onCancelPlacement, onPassMeeple, onPendingStateChange }) {
+  constructor(canvas, { onSlotClick, onTileClick, onMeeplePointClick, onConfirmPendingTile, onCancelPlacement, onPassMeeple, onPendingStateChange, onLaserMove, onLaserLeave }) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.onSlotClick = onSlotClick;
@@ -11,6 +11,14 @@ class BoardRenderer {
     this.onCancelPlacement = onCancelPlacement;
     this.onPassMeeple = onPassMeeple;
     this.onPendingStateChange = onPendingStateChange;
+    this.onLaserMove = onLaserMove || null;
+    this.onLaserLeave = onLaserLeave || null;
+
+    this.width = canvas.parentElement ? canvas.parentElement.clientWidth : 800;
+    this.height = canvas.parentElement ? canvas.parentElement.clientHeight : 600;
+    this.lastConfirmedPos = null;
+    this.lastConfirmedTimestamp = 0;
+    this.lastConfirmedHighlightStart = 0;
 
     // Viewport transform
     this.tileSize = 100;
@@ -65,8 +73,6 @@ class BoardRenderer {
     // Laser Pointer Interactive System
     this.lasers = new Map(); // playerId -> { id, name, color, x, y, time, trail: [] }
     this.laserMode = false;
-    this.onLaserMove = null;
-    this.onLaserLeave = null;
 
     this.initEvents();
     this.initResizeObserver();
@@ -309,6 +315,17 @@ class BoardRenderer {
   initEvents() {
     // ==================== MOUSE EVENTS ====================
     this.canvas.addEventListener('mousedown', (e) => {
+      if (this.laserMode && e.button === 0) {
+        this.isDragging = false;
+        this.hasMoved = false;
+        const rect = this.canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        const worldX = (mouseX - this.panX) / this.zoom;
+        const worldY = (mouseY - this.panY) / this.zoom;
+        if (this.onLaserMove) this.onLaserMove(worldX, worldY);
+        return;
+      }
       this.isDragging = true;
       this.hasMoved = false;
       this.dragStartX = e.clientX - this.panX;
@@ -333,7 +350,9 @@ class BoardRenderer {
         this.draw();
       }
 
-      if (mouseX >= 0 && mouseX <= this.width && mouseY >= 0 && mouseY <= this.height) {
+      const cW = this.width || rect.width;
+      const cH = this.height || rect.height;
+      if (mouseX >= 0 && mouseX <= cW && mouseY >= 0 && mouseY <= cH) {
         if (this.laserMode) {
           const worldX = (mouseX - this.panX) / this.zoom;
           const worldY = (mouseY - this.panY) / this.zoom;
@@ -612,12 +631,10 @@ class BoardRenderer {
     if (this.pendingPos && this.turnPhase === 'place_tile' && this.isMyTurn) {
       const screen = this.gridToScreen(this.pendingPos.x, this.pendingPos.y);
 
-      // Check tap on confirm button at bottom-right corner
+      // Check tap on confirm button
       if (this.isPendingValid) {
-        const confirmRadius = Math.max(16, 20 * this.zoom);
-        const confirmX = screen.x + screen.size - confirmRadius - 2;
-        const confirmY = screen.y + screen.size - confirmRadius - 2;
-        if (Math.hypot(screenX - confirmX, screenY - confirmY) <= confirmRadius + 10) {
+        const { confirmPos } = this.getPendingControlsGeometry(screen);
+        if (Math.hypot(screenX - confirmPos.x, screenY - confirmPos.y) <= confirmPos.radius + 10) {
           if (this.onConfirmPendingTile) {
             this.isSubmittingPlacement = true;
             this.onConfirmPendingTile(this.pendingPos.x, this.pendingPos.y, this.pendingRotation);
@@ -720,7 +737,7 @@ class BoardRenderer {
     if (this.highlightAnimFrame) return;
     const loop = () => {
       const now = Date.now();
-      if (this.lastPlacedPos && (now - (this.lastPlacedHighlightStart || 0) < 7500)) {
+      if (this.lastConfirmedPos && (now - (this.lastConfirmedHighlightStart || 0) < 5000)) {
         this.draw();
         this.highlightAnimFrame = requestAnimationFrame(loop);
       } else {
@@ -731,7 +748,7 @@ class BoardRenderer {
     this.highlightAnimFrame = requestAnimationFrame(loop);
   }
 
-  updateState({ board, validPlacements, currentTile, currentRotation, turnPhase, lastPlacedPos, segments, activePlayerColor, isMyTurn, hasMeeples }) {
+  updateState({ board, validPlacements, currentTile, currentRotation, turnPhase, lastPlacedPos, lastConfirmedPos, segments, activePlayerColor, isMyTurn, hasMeeples }) {
     this.isSubmittingPlacement = false;
     const isFirstLoad = !this.boardData;
     this.boardData = board;
@@ -739,12 +756,15 @@ class BoardRenderer {
     this.currentTile = currentTile;
     this.currentRotation = currentRotation || 0;
     this.turnPhase = turnPhase || 'place_tile';
+    this.lastPlacedPos = lastPlacedPos;
 
-    if (lastPlacedPos && (!this.lastPlacedPos || this.lastPlacedPos.x !== lastPlacedPos.x || this.lastPlacedPos.y !== lastPlacedPos.y)) {
-      this.lastPlacedHighlightStart = Date.now();
+    // Trigger glowing highlight ONLY after final confirmation of the turn, lasting 5 seconds
+    if (lastConfirmedPos && (!this.lastConfirmedPos || this.lastConfirmedPos.x !== lastConfirmedPos.x || this.lastConfirmedPos.y !== lastConfirmedPos.y || (lastConfirmedPos.timestamp && lastConfirmedPos.timestamp !== this.lastConfirmedTimestamp))) {
+      this.lastConfirmedPos = { x: lastConfirmedPos.x, y: lastConfirmedPos.y };
+      this.lastConfirmedTimestamp = lastConfirmedPos.timestamp || Date.now();
+      this.lastConfirmedHighlightStart = Date.now();
       this.scheduleHighlightAnimation();
     }
-    this.lastPlacedPos = lastPlacedPos;
 
     this.meepleSegments = (segments || []).filter(s => !s.noMeeple && s.type !== 'river');
     this.activePlayerColor = activePlayerColor || 'red';
@@ -809,17 +829,17 @@ class BoardRenderer {
   }
 
   drawLastPlacedHighlight() {
-    if (!this.lastPlacedPos) return;
+    if (!this.lastConfirmedPos) return;
     const now = Date.now();
-    const elapsed = now - (this.lastPlacedHighlightStart || 0);
-    if (elapsed > 7500) return;
+    const elapsed = now - (this.lastConfirmedHighlightStart || 0);
+    if (elapsed > 5000) return;
 
-    const screen = this.gridToScreen(this.lastPlacedPos.x, this.lastPlacedPos.y);
+    const screen = this.gridToScreen(this.lastConfirmedPos.x, this.lastConfirmedPos.y);
     const ctx = this.ctx;
     ctx.save();
 
-    // Pulse factor with smooth decay over 7.5s
-    const decay = Math.max(0, 1 - elapsed / 7500);
+    // Pulse factor with smooth decay over 5.0s
+    const decay = Math.max(0, 1 - elapsed / 5000);
     const pulse = 0.5 + 0.5 * Math.sin(now / 140);
     const alpha = (0.4 + 0.6 * pulse) * decay;
 
@@ -876,6 +896,8 @@ class BoardRenderer {
         continue;
       }
 
+      this.ctx.save();
+
       const screen = this.worldToScreen(laser.x, laser.y);
       const colorMap = {
         red: '#ef4444',
@@ -883,6 +905,7 @@ class BoardRenderer {
         green: '#10b981',
         yellow: '#f59e0b',
         black: '#94a3b8',
+        pink: '#ec4899',
         purple: '#a855f7'
       };
       const baseColor = colorMap[laser.color] || '#f43f5e';
@@ -893,9 +916,9 @@ class BoardRenderer {
         for (let i = 0; i < laser.trail.length; i++) {
           const pt = laser.trail[i];
           const sPt = this.worldToScreen(pt.x, pt.y);
-          const alpha = Math.max(0, 1 - (now - pt.time) / 500) * 0.5;
+          const alpha = Math.max(0, 1 - (now - pt.time) / 700) * 0.6;
           this.ctx.strokeStyle = baseColor;
-          this.ctx.lineWidth = 3 * this.zoom;
+          this.ctx.lineWidth = Math.max(2, 3 * this.zoom);
           this.ctx.globalAlpha = alpha;
           if (i === 0) this.ctx.moveTo(sPt.x, sPt.y);
           else this.ctx.lineTo(sPt.x, sPt.y);
@@ -906,7 +929,7 @@ class BoardRenderer {
 
       // 2. Draw outer glowing ripple
       const pulse = 1 + 0.25 * Math.sin(now / 100);
-      const auraRad = 16 * pulse;
+      const auraRad = Math.max(12, 16 * pulse);
       const grad = this.ctx.createRadialGradient(screen.x, screen.y, 2, screen.x, screen.y, auraRad);
       grad.addColorStop(0, baseColor);
       grad.addColorStop(0.4, baseColor + '88');
@@ -932,19 +955,29 @@ class BoardRenderer {
 
       // 4. Draw player tag pill above laser
       this.ctx.font = 'bold 11px Inter, sans-serif';
-      const text = `🔴 ${laser.name}`;
+      const colorEmojiMap = {
+        red: '🔴',
+        blue: '🔵',
+        green: '🟢',
+        yellow: '🟡',
+        black: '⚫',
+        pink: '🌸',
+        purple: '🟣'
+      };
+      const emoji = colorEmojiMap[laser.color] || '🔴';
+      const text = `${emoji} ${laser.name}`;
       const textMetrics = this.ctx.measureText(text);
-      const tagW = textMetrics.width + 12;
-      const tagH = 18;
+      const tagW = textMetrics.width + 14;
+      const tagH = 20;
       const tagX = screen.x - tagW / 2;
-      const tagY = screen.y - 28;
+      const tagY = screen.y - 30;
 
-      this.ctx.fillStyle = 'rgba(15, 12, 10, 0.88)';
+      this.ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
       this.ctx.strokeStyle = baseColor;
-      this.ctx.lineWidth = 1.2;
+      this.ctx.lineWidth = 1.4;
       this.ctx.beginPath();
       if (this.ctx.roundRect) {
-        this.ctx.roundRect(tagX, tagY, tagW, tagH, 4);
+        this.ctx.roundRect(tagX, tagY, tagW, tagH, 5);
       } else {
         this.ctx.rect(tagX, tagY, tagW, tagH);
       }
@@ -952,7 +985,11 @@ class BoardRenderer {
       this.ctx.stroke();
 
       this.ctx.fillStyle = '#f8fafc';
-      this.ctx.fillText(text, tagX + 6, tagY + 13);
+      this.ctx.textAlign = 'left';
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillText(text, tagX + 7, tagY + tagH / 2);
+
+      this.ctx.restore();
     }
   }
 
@@ -1106,6 +1143,50 @@ class BoardRenderer {
     ctx.restore();
   }
 
+  // Responsive in-place buttons geometry: guarantees rotate and confirm never overlap at any zoom level
+  getPendingControlsGeometry(screen) {
+    const rotateRadius = Math.max(14, Math.min(22, 17 * this.zoom));
+    const confirmRadius = Math.max(14, Math.min(22, 17 * this.zoom));
+    const rotatePos = {
+      x: screen.x + screen.size / 2,
+      y: screen.y + screen.size / 2,
+      radius: rotateRadius
+    };
+
+    // Calculate required distance between button centers so they never touch
+    const minCenterDist = rotateRadius + confirmRadius + 8;
+    const cornerDx = screen.size / 2 - confirmRadius - 4;
+    const cornerDy = screen.size / 2 - confirmRadius - 4;
+    const currentCornerDist = Math.hypot(cornerDx, cornerDy);
+
+    let confirmX, confirmY;
+    if (cornerDx > 0 && cornerDy > 0 && currentCornerDist >= minCenterDist) {
+      // Zoomed in: plenty of room inside the tile corner without colliding with center rotate
+      confirmX = screen.x + screen.size - confirmRadius - 4;
+      confirmY = screen.y + screen.size - confirmRadius - 4;
+    } else {
+      // Zoomed out (far view): tile is too small to fit both inside, so push confirm button
+      // outward along the 45° diagonal so there is ALWAYS crystal-clear separation
+      const angle = Math.PI / 4; // 45° bottom-right
+      confirmX = rotatePos.x + minCenterDist * Math.cos(angle);
+      confirmY = rotatePos.y + minCenterDist * Math.sin(angle);
+
+      // Boundary safety check: if reaching screen edge, shift safely to left/top
+      if (confirmX + confirmRadius > this.width - 6) {
+        confirmX = screen.x - confirmRadius - 8;
+        confirmY = screen.y + screen.size / 2;
+      }
+    }
+
+    const confirmPos = {
+      x: confirmX,
+      y: confirmY,
+      radius: confirmRadius
+    };
+
+    return { rotatePos, confirmPos };
+  }
+
   drawPendingInPlaceTile() {
     const ctx = this.ctx;
     const screen = this.gridToScreen(this.pendingPos.x, this.pendingPos.y);
@@ -1130,47 +1211,45 @@ class BoardRenderer {
     // In-place rotate & confirm badges: only on desktop (mouse hover), hidden on mobile/tablet
     const isMobileOrTablet = window.innerWidth <= 1024 || ('ontouchstart' in window);
     if (!isMobileOrTablet) {
+      const { rotatePos, confirmPos } = this.getPendingControlsGeometry(screen);
+
       // Center Rotate Badge inside the pending tile
-      const centerRadius = Math.max(16, 20 * this.zoom);
       ctx.save();
       ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
       ctx.shadowBlur = 8;
       ctx.fillStyle = 'rgba(41, 128, 185, 0.9)';
       ctx.beginPath();
-      ctx.arc(screen.x + screen.size / 2, screen.y + screen.size / 2, centerRadius, 0, Math.PI * 2);
+      ctx.arc(rotatePos.x, rotatePos.y, rotatePos.radius, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 2;
       ctx.stroke();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = `bold ${Math.max(12, 15 * this.zoom)}px Inter, sans-serif`;
+      ctx.font = `bold ${Math.max(11, Math.min(16, 14 * this.zoom))}px Inter, sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('🔄', screen.x + screen.size / 2, screen.y + screen.size / 2);
+      ctx.fillText('🔄', rotatePos.x, rotatePos.y);
       ctx.restore();
 
-      // Confirm Button (✓) at bottom-right corner if valid
+      // Confirm Button (✓) if placement is valid
       if (this.isPendingValid) {
-        const confirmRadius = Math.max(16, 20 * this.zoom);
-        const confirmX = screen.x + screen.size - confirmRadius - 2;
-        const confirmY = screen.y + screen.size - confirmRadius - 2;
         ctx.save();
         ctx.shadowColor = 'rgba(46, 204, 113, 0.9)';
         ctx.shadowBlur = 12;
         ctx.fillStyle = '#27ae60';
         ctx.beginPath();
-        ctx.arc(confirmX, confirmY, confirmRadius, 0, Math.PI * 2);
+        ctx.arc(confirmPos.x, confirmPos.y, confirmPos.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = `bold ${Math.max(14, 18 * this.zoom)}px Inter, sans-serif`;
+        ctx.font = `bold ${Math.max(12, Math.min(18, 16 * this.zoom))}px Inter, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('✓', confirmX, confirmY);
+        ctx.fillText('✓', confirmPos.x, confirmPos.y);
         ctx.restore();
       }
     }
@@ -1221,7 +1300,7 @@ class BoardRenderer {
         continue;
       }
 
-      const radius = Math.max(7.5, (isHovered ? 10.5 : 8) * this.zoom);
+      const radius = Math.max(5.5, Math.min(10, (isHovered ? 10 : 7.5) * this.zoom));
 
       ctx.save();
       ctx.shadowColor = isHovered ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.6)';

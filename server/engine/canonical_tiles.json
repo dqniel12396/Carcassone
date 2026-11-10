@@ -279,7 +279,7 @@
       "F",
       "C"
     ],
-    "shield": true,
+    "shield": false,
     "monastery": false,
     "isStartTile": false,
     "isRiver": false,
@@ -934,7 +934,7 @@
       "F",
       "F"
     ],
-    "shield": true,
+    "shield": false,
     "monastery": false,
     "isStartTile": false,
     "isRiver": false,
@@ -1990,7 +1990,7 @@
       "R",
       "C"
     ],
-    "shield": true,
+    "shield": false,
     "monastery": false,
     "isStartTile": false,
     "isRiver": false,
@@ -2118,7 +2118,7 @@
       "R",
       "C"
     ],
-    "shield": false,
+    "shield": true,
     "monastery": false,
     "isStartTile": false,
     "isRiver": false,
@@ -2569,7 +2569,7 @@
       "F",
       "F"
     ],
-    "shield": false,
+    "shield": true,
     "monastery": false,
     "isStartTile": false,
     "isRiver": false,
@@ -3616,7 +3616,7 @@
       "F",
       "C"
     ],
-    "shield": true,
+    "shield": false,
     "monastery": false,
     "isStartTile": false,
     "isRiver": false,
@@ -4739,7 +4739,7 @@
       "F",
       "C"
     ],
-    "shield": false,
+    "shield": true,
     "monastery": false,
     "isStartTile": false,
     "isRiver": false,
