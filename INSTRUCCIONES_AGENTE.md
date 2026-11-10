@@ -68,3 +68,4 @@ Para trabajar en equipo sin pisar cambios ni desincronizar la rama:
    git push origin main
    ```
 3. Si el cambio debe reflejarse en el servidor CasaOS, actualiza el código en `/DATA/AppData/carcassonne-web` y reinicia el contenedor (`docker restart carcassonne-server`).
+
